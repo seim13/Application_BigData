@@ -10,11 +10,11 @@ Realise by Gilles Robin and Juliette Seimandi
 <br>
  <p> The goal of this project is to apply some concepts & tools seen in the 3 parts of this course, this project is organized into 3 parts :</p>
 <ol>
-<li>  Part 1 : Building Classical ML projects with respect to basic ML Coding best practices </li>
+<li> Part 1 : Building Classical ML projects with respect to basic ML Coding best practices </li>
   
-<li>  Part 2 : Integrate MLFlow to your project </li>
+<li> Part 2 : Integrate MLFlow to your project </li>
   
-<li>  Part 3 : Integrate XAI (ML Interpretability with SHAP) to your project </li>
+<li> Part 3 : Integrate XAI (ML Interpretability with SHAP) to your project </li>
 
 </ol>
 
@@ -28,7 +28,7 @@ Realise by Gilles Robin and Juliette Seimandi
 
 <p>Then we build Xgboost, Random Forest and Gradient Boosting and improve all model</p> 
 <br>
-<h3> Sphinx Documentation <h3>
+<h3> Sphinx Documentation </h3>
 <br>
  <p>To have a better view of our model you can check our Sphinx documentation, to do so :</p>
 <br>
