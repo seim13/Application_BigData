@@ -24,7 +24,7 @@ Realise by Gilles Robin and Juliette Seimandi
   
 <p>Download application_train.csv and application_test.csv and put it in your home directory with allother file</p>
 
-<p>You can find our load an analise of the data in the <strong><em> Import data and data cleaning.ipynb </strong></em> then our <strong><em> feature engineering in the <strong><em> Feature engineering.ipynb </strong></em> with the creation of new and clean data set that will be used in our machine learning model</p>
+<p>You can find our load an analise of the data in the <strong><em> Import data and data cleaning.ipynb </strong></em> then our feature engineering in the <strong><em> Feature engineering.ipynb </strong></em> with the creation of new and clean data set that will be used in our machine learning model</p>
 
 <p>Then we build Xgboost, Random Forest and Gradient Boosting and improve all model in the file <strong><em> Model building For balanced dataset.ipynb </strong></em> </p> 
 <br>
@@ -44,7 +44,7 @@ Realise by Gilles Robin and Juliette Seimandi
 
 <h3> Part 3 </h3>
 
-<p> We have to use SHAP library to have a better understanding of our performance. You can find our shap implemantation in the file <strong><em> XAI with SHAP method.ipynb</strong></em>  </p> 
+<p> We have to use SHAP library to have a better understanding of our performance. You can find our shap implemantation in the file <strong><em>XAI with SHAP method.ipynb</strong></em>  </p> 
 <p> Infortunatly we can visualise our graph in the sphinx documentation because it doesn't compile the java script package but if you run the fil on your own computeur you will be able to have them</p>
 
 
