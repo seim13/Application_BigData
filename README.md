@@ -3,19 +3,21 @@
 <h2> Part 1 of the project for Advanced BigData Systems 2020-2021 <h2>
 <br>
 Realise by Gilles Robin and Juliette Seimandi
+ 
 <br>
-## Goals of the Project
-<br>
- <p> The goal of this project is to apply some concepts & tools seen in the 3 parts of this course, this project is organized into 3 parts :<p>
- <br>
- Part 1 : Building Classical ML projects with respect to basic ML Coding best practices
-  <br>
- Part 2 : Integrate MLFlow to your project
-  <br>
- Part 3 : Integrate XAI (ML Interpretability with SHAP) to your project
-  <br>
 
-## Part 1
+<h3> Goals of the Project <h3>
+<br>
+ <p> The goal of this project is to apply some concepts & tools seen in the 3 parts of this course, this project is organized into 3 parts :</p>
+
+ Part 1 : Building Classical ML projects with respect to basic ML Coding best practices
+  
+ Part 2 : Integrate MLFlow to your project
+  
+ Part 3 : Integrate XAI (ML Interpretability with SHAP) to your project
+  
+
+<h3> Part 1 <h3>
 <br>
 <p>We use DataSet of Home credit risk classification in this project, you can find those dataset in https://www.kaggle.com/c/home-credit-default-risk/data
   <br>
