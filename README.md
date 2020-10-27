@@ -36,11 +36,15 @@ Realise by Gilles Robin and Juliette Seimandi
   <br>
 <li> * launch a terminal </li>
   <br>
-<li> * go to the git repository and launch the command <em> open build/html/index.html <em> </li>
+<li> * go to the git repository and launch the command <em> open build/html/index.html </em> </li>
    <br>
  <p>Then you will be abbale to understand all our project.</p>
   
 <h3> Part 2 </h3>
 
 <h3> Part 3 </h3>
+
+<p> We have to use SHAP library to have a better understanding of our performance. You can find our shap implemantation in the file <em> XAI with SHAP method.ipynb </em>  </p> 
+<p> Infortunatly we can visualise our graph in the sphinx documentation because it doesn't compile the java script package but if you run the fil on your own computeur you will be able to have them</p>
+
 
