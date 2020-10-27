@@ -32,11 +32,13 @@ Realise by Gilles Robin and Juliette Seimandi
 <br>
  <p>To have a better view of our model you can check our Sphinx documentation, to do so :</p>
 <br>
-<li> * Clone this git repositry </ li>
+<ul>
+<li>  Clone this git repositry </ li>
   <br>
-<li> * launch a terminal </li>
+<li>  launch a terminal </li>
   <br>
-<li> * go to the git repository and launch the command <em> open build/html/index.html </em> </li>
+<li> go to the git repository and launch the command <em> open build/html/index.html </em> </li>
+ </ul>
    <br>
  <p>Then you will be abbale to understand all our project.</p>
   
