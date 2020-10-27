@@ -1,0 +1,1848 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Model building For balanced dataset &#8212; Machine learning Finance use case 28/10/2020 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Import data and data cleaning" href="Import%20data%20and%20data%20cleaning.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<div class="section" id="Model-building-For-balanced-dataset">
+<h1>Model building For balanced dataset<a class="headerlink" href="#Model-building-For-balanced-dataset" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="Prepared-dataset">
+<h2>Prepared dataset<a class="headerlink" href="#Prepared-dataset" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">sklearn</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">QuantileTransformer</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">f1_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">GridSearchCV</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">classification_report</span>
+
+<span class="kn">import</span> <span class="nn">pickle</span>
+</pre></div>
+</div>
+</div>
+Load dataset<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df_train_balanced</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;df_balanced.csv&#39;</span><span class="p">)</span>
+<span class="n">df_test</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;df_clean_test.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">#df_test.drop(&#39;Unnamed: 0&#39;, axis=1, inplace=True)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df_test</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>SK_ID_CURR</th>
+      <th>CNT_CHILDREN</th>
+      <th>AMT_INCOME_TOTAL</th>
+      <th>AMT_CREDIT</th>
+      <th>AMT_ANNUITY</th>
+      <th>AMT_GOODS_PRICE</th>
+      <th>REGION_POPULATION_RELATIVE</th>
+      <th>DAYS_BIRTH</th>
+      <th>DAYS_EMPLOYED</th>
+      <th>DAYS_REGISTRATION</th>
+      <th>...</th>
+      <th>HOUSETYPE_MODE_terraced house</th>
+      <th>WALLSMATERIAL_MODE_Block</th>
+      <th>WALLSMATERIAL_MODE_Mixed</th>
+      <th>WALLSMATERIAL_MODE_Monolithic</th>
+      <th>WALLSMATERIAL_MODE_Others</th>
+      <th>WALLSMATERIAL_MODE_Panel</th>
+      <th>WALLSMATERIAL_MODE_Stone, brick</th>
+      <th>WALLSMATERIAL_MODE_Wooden</th>
+      <th>EMERGENCYSTATE_MODE_No</th>
+      <th>EMERGENCYSTATE_MODE_Yes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-5.199338</td>
+      <td>1.579968</td>
+      <td>1.186981</td>
+      <td>1.811457</td>
+      <td>1.023003</td>
+      <td>1.873053</td>
+      <td>0.509202</td>
+      <td>0.209327</td>
+      <td>0.029800</td>
+      <td>0.584551</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-3.952911</td>
+      <td>-5.199338</td>
+      <td>0.901416</td>
+      <td>1.080589</td>
+      <td>0.384455</td>
+      <td>0.951518</td>
+      <td>0.432104</td>
+      <td>-0.930962</td>
+      <td>-2.413129</td>
+      <td>-0.373473</td>
+      <td>...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-3.517482</td>
+      <td>-5.199338</td>
+      <td>0.015055</td>
+      <td>-0.556927</td>
+      <td>-0.517790</td>
+      <td>-0.842694</td>
+      <td>0.979511</td>
+      <td>0.320742</td>
+      <td>0.598915</td>
+      <td>-0.296683</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-3.454423</td>
+      <td>0.746351</td>
+      <td>0.533636</td>
+      <td>-0.188033</td>
+      <td>-0.341493</td>
+      <td>-0.211070</td>
+      <td>0.432104</td>
+      <td>1.060909</td>
+      <td>0.020689</td>
+      <td>2.104112</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-3.400432</td>
+      <td>-5.199338</td>
+      <td>-1.346386</td>
+      <td>-0.999986</td>
+      <td>-0.692715</td>
+      <td>-0.842694</td>
+      <td>-1.264066</td>
+      <td>1.223112</td>
+      <td>-0.333524</td>
+      <td>-0.131798</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>8398</th>
+      <td>3.229139</td>
+      <td>-5.199338</td>
+      <td>0.533636</td>
+      <td>-0.663276</td>
+      <td>0.288000</td>
+      <td>-0.842694</td>
+      <td>-1.264066</td>
+      <td>0.831209</td>
+      <td>-0.943986</td>
+      <td>-0.156744</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>8399</th>
+      <td>3.234652</td>
+      <td>-5.199338</td>
+      <td>-1.068522</td>
+      <td>-1.418119</td>
+      <td>-0.945616</td>
+      <td>-1.467860</td>
+      <td>-0.593940</td>
+      <td>0.744694</td>
+      <td>2.702784</td>
+      <td>0.737605</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>8400</th>
+      <td>3.339828</td>
+      <td>0.746351</td>
+      <td>-1.068522</td>
+      <td>0.605701</td>
+      <td>0.419115</td>
+      <td>0.444534</td>
+      <td>-0.729877</td>
+      <td>1.156164</td>
+      <td>-0.028916</td>
+      <td>0.344582</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>8401</th>
+      <td>4.110136</td>
+      <td>0.746351</td>
+      <td>-1.068522</td>
+      <td>0.135645</td>
+      <td>-0.844790</td>
+      <td>-0.139710</td>
+      <td>0.043924</td>
+      <td>-0.258665</td>
+      <td>-0.119468</td>
+      <td>-0.164297</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>8402</th>
+      <td>5.199338</td>
+      <td>0.746351</td>
+      <td>0.015055</td>
+      <td>-1.460531</td>
+      <td>-1.075207</td>
+      <td>-1.467860</td>
+      <td>-0.299230</td>
+      <td>-0.269742</td>
+      <td>-1.409668</td>
+      <td>0.671732</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>8403 rows × 213 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df_train_balanced</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>SK_ID_CURR</th>
+      <th>TARGET</th>
+      <th>CNT_CHILDREN</th>
+      <th>AMT_INCOME_TOTAL</th>
+      <th>AMT_CREDIT</th>
+      <th>AMT_ANNUITY</th>
+      <th>AMT_GOODS_PRICE</th>
+      <th>REGION_POPULATION_RELATIVE</th>
+      <th>DAYS_BIRTH</th>
+      <th>DAYS_EMPLOYED</th>
+      <th>...</th>
+      <th>HOUSETYPE_MODE_terraced house</th>
+      <th>WALLSMATERIAL_MODE_Block</th>
+      <th>WALLSMATERIAL_MODE_Mixed</th>
+      <th>WALLSMATERIAL_MODE_Monolithic</th>
+      <th>WALLSMATERIAL_MODE_Others</th>
+      <th>WALLSMATERIAL_MODE_Panel</th>
+      <th>WALLSMATERIAL_MODE_Stone, brick</th>
+      <th>WALLSMATERIAL_MODE_Wooden</th>
+      <th>EMERGENCYSTATE_MODE_No</th>
+      <th>EMERGENCYSTATE_MODE_Yes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2.571996</td>
+      <td>0</td>
+      <td>-5.199338</td>
+      <td>-1.368450</td>
+      <td>-0.257495</td>
+      <td>-0.257495</td>
+      <td>-0.086674</td>
+      <td>0.291367</td>
+      <td>-0.564986</td>
+      <td>1.018778</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2.476608</td>
+      <td>0</td>
+      <td>-5.199338</td>
+      <td>1.088723</td>
+      <td>0.177827</td>
+      <td>0.202098</td>
+      <td>0.320290</td>
+      <td>5.199338</td>
+      <td>1.339147</td>
+      <td>-0.584288</td>
+      <td>...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.081761</td>
+      <td>0</td>
+      <td>-5.199338</td>
+      <td>1.088723</td>
+      <td>0.118204</td>
+      <td>0.624172</td>
+      <td>-0.086674</td>
+      <td>5.199338</td>
+      <td>-0.108581</td>
+      <td>-0.044369</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.475078</td>
+      <td>0</td>
+      <td>-5.199338</td>
+      <td>-0.091712</td>
+      <td>-0.132113</td>
+      <td>0.385388</td>
+      <td>-0.280911</td>
+      <td>-0.517790</td>
+      <td>0.889772</td>
+      <td>0.064289</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.480132</td>
+      <td>0</td>
+      <td>-5.199338</td>
+      <td>0.459820</td>
+      <td>0.354822</td>
+      <td>0.545244</td>
+      <td>0.504922</td>
+      <td>5.199338</td>
+      <td>-1.459761</td>
+      <td>-2.159307</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>7523</th>
+      <td>3.161930</td>
+      <td>1</td>
+      <td>0.733156</td>
+      <td>-0.421111</td>
+      <td>-0.189187</td>
+      <td>0.532893</td>
+      <td>-0.322932</td>
+      <td>0.180377</td>
+      <td>0.473331</td>
+      <td>-0.205941</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>7524</th>
+      <td>3.247057</td>
+      <td>1</td>
+      <td>0.733156</td>
+      <td>0.991746</td>
+      <td>0.429987</td>
+      <td>1.310640</td>
+      <td>0.377630</td>
+      <td>-0.075345</td>
+      <td>0.772027</td>
+      <td>-0.066450</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>7525</th>
+      <td>3.383887</td>
+      <td>1</td>
+      <td>-5.199338</td>
+      <td>0.071571</td>
+      <td>1.721914</td>
+      <td>1.044409</td>
+      <td>1.355761</td>
+      <td>1.132898</td>
+      <td>0.814576</td>
+      <td>-0.705530</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>7526</th>
+      <td>3.436495</td>
+      <td>1</td>
+      <td>0.733156</td>
+      <td>0.552537</td>
+      <td>-0.257495</td>
+      <td>0.490519</td>
+      <td>-0.086674</td>
+      <td>0.091712</td>
+      <td>1.370228</td>
+      <td>-0.688441</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>7527</th>
+      <td>5.199338</td>
+      <td>1</td>
+      <td>-5.199338</td>
+      <td>0.718462</td>
+      <td>-0.026349</td>
+      <td>-0.258827</td>
+      <td>-0.086674</td>
+      <td>-0.461215</td>
+      <td>-0.470049</td>
+      <td>1.320531</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>7528 rows × 213 columns</p>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">column_nan</span><span class="o">=</span><span class="n">df_train_balanced</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">column_test</span><span class="o">=</span><span class="n">df_test</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+Split smatly the dataset in train, validation and test dataset<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">stratified_split</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">val_percent</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Function to split a dataframe into train and validation sets, while preserving the ratio of the labels in the target variable</span>
+<span class="sd">    Inputs:</span>
+<span class="sd">    - df, the dataframe</span>
+<span class="sd">    - target, the target variable</span>
+<span class="sd">    - val_percent, the percentage of validation samples, default 0.2</span>
+<span class="sd">    Outputs:</span>
+<span class="sd">    - train_idxs, the indices of the training dataset</span>
+<span class="sd">    - val_idxs, the indices of the validation dataset</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">classes</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+    <span class="n">train_idxs</span><span class="p">,</span> <span class="n">val_idxs</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+        <span class="n">idx</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">==</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+        <span class="n">val_size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">*</span><span class="n">val_percent</span><span class="p">)</span>
+        <span class="n">val_idxs</span><span class="o">+=</span><span class="n">idx</span><span class="p">[:</span><span class="n">val_size</span><span class="p">]</span>
+        <span class="n">train_idxs</span><span class="o">+=</span><span class="n">idx</span><span class="p">[</span><span class="n">val_size</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="n">train_idxs</span><span class="p">,</span> <span class="n">val_idxs</span>
+
+
+<span class="n">train_idxs</span><span class="p">,</span> <span class="n">val_idxs</span> <span class="o">=</span> <span class="n">stratified_split</span><span class="p">(</span><span class="n">df_train_balanced</span><span class="p">,</span> <span class="s1">&#39;TARGET&#39;</span><span class="p">,</span> <span class="n">val_percent</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+
+<span class="n">val_idxs</span><span class="p">,</span> <span class="n">test_idxs</span> <span class="o">=</span> <span class="n">stratified_split</span><span class="p">(</span><span class="n">df_train_balanced</span><span class="p">[</span><span class="n">df_train_balanced</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">val_idxs</span><span class="p">)],</span> <span class="s1">&#39;TARGET&#39;</span><span class="p">,</span> <span class="n">val_percent</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">train_df</span> <span class="o">=</span> <span class="n">df_train_balanced</span><span class="p">[</span><span class="n">df_train_balanced</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">train_idxs</span><span class="p">)]</span>
+
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="n">column_nan</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">Y_train</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[[</span><span class="s1">&#39;TARGET&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Retrieved Training Data&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="n">Y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="n">val_df</span> <span class="o">=</span> <span class="n">df_train_balanced</span><span class="p">[</span><span class="n">df_train_balanced</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">val_idxs</span><span class="p">)]</span>
+<span class="n">X_val</span> <span class="o">=</span> <span class="n">val_df</span><span class="p">[</span><span class="n">column_nan</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">Y_val</span> <span class="o">=</span> <span class="n">val_df</span><span class="p">[[</span><span class="s1">&#39;TARGET&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Retrieved Validation Data&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_val</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="n">Y_val</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="n">test_df</span> <span class="o">=</span> <span class="n">df_train_balanced</span><span class="p">[</span><span class="n">df_train_balanced</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">test_idxs</span><span class="p">)]</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">test_df</span><span class="p">[</span><span class="n">column_nan</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">Y_test</span> <span class="o">=</span> <span class="n">test_df</span><span class="p">[[</span><span class="s1">&#39;TARGET&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Retrieved Test Data&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="n">Y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Retrieved Training Data
+(5646, 213) ---- (5646, 1)
+Retrieved Validation Data
+(942, 213) ---- (942, 1)
+Retrieved Test Data
+(940, 213) ---- (940, 1)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">#store data, all in numpy arrays</span>
+<span class="n">training_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;X_train&#39;</span><span class="p">:</span><span class="n">X_train</span><span class="p">,</span><span class="s1">&#39;Y_train&#39;</span><span class="p">:</span><span class="n">Y_train</span><span class="p">,</span>
+                <span class="s1">&#39;X_val&#39;</span><span class="p">:</span> <span class="n">X_val</span><span class="p">,</span><span class="s1">&#39;Y_val&#39;</span><span class="p">:</span><span class="n">Y_val</span><span class="p">,</span>
+                <span class="s1">&#39;X_test&#39;</span><span class="p">:</span> <span class="n">X_test</span><span class="p">,</span><span class="s1">&#39;Y_test&#39;</span><span class="p">:</span><span class="n">Y_test</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Random-Forest">
+<h2>Random Forest<a class="headerlink" href="#Random-Forest" title="Permalink to this headline">¶</a></h2>
+Create the model and fit with random value<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">clf_balanced</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">27</span><span class="p">,</span>
+                       <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">clf_balanced</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;X_train&#39;</span><span class="p">],</span> <span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done 100 out of 100 | elapsed:    1.2s finished
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+RandomForestClassifier(random_state=27, verbose=1)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">predicted_labels</span> <span class="o">=</span> <span class="n">clf_balanced</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;X_test&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done 100 out of 100 | elapsed:    0.1s finished
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_test&#39;</span><span class="p">],</span> <span class="n">predicted_labels</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1.0
+</pre></div></div>
+</div>
+Train model with different parameterr to find the best one<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;n_estimators&#39;</span>      <span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">500</span><span class="p">,</span><span class="mi">50</span><span class="p">),</span>
+    <span class="s1">&#39;max_depth&#39;</span>         <span class="p">:</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+    <span class="s1">&#39;max_features&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;auto&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;criterion&#39;</span> <span class="p">:[</span><span class="s1">&#39;gini&#39;</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="c1">#metrics to consider: f1_micro, f1_macro, roc_auc_ovr</span>
+<span class="n">gsearch1</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">estimator</span> <span class="o">=</span> <span class="n">clf_balanced</span><span class="p">,</span> <span class="n">param_grid</span> <span class="o">=</span> <span class="n">params</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;f1_micro&#39;</span><span class="p">,</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">verbose</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">gsearch1</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;X_train&#39;</span><span class="p">],</span> <span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
+
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Fitting 5 folds for each of 40 candidates, totalling 200 fits
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=-1)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=-1)]: Done   5 tasks      | elapsed:    7.5s
+[Parallel(n_jobs=-1)]: Done  10 tasks      | elapsed:   14.1s
+[Parallel(n_jobs=-1)]: Done  17 tasks      | elapsed:   22.7s
+[Parallel(n_jobs=-1)]: Done  24 tasks      | elapsed:   30.3s
+[Parallel(n_jobs=-1)]: Done  33 tasks      | elapsed:   42.9s
+[Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:   53.7s
+[Parallel(n_jobs=-1)]: Done  53 tasks      | elapsed:  1.0min
+[Parallel(n_jobs=-1)]: Done  64 tasks      | elapsed:  1.2min
+[Parallel(n_jobs=-1)]: Done  77 tasks      | elapsed:  1.5min
+[Parallel(n_jobs=-1)]: Done  90 tasks      | elapsed:  1.6min
+[Parallel(n_jobs=-1)]: Done 105 tasks      | elapsed:  2.1min
+[Parallel(n_jobs=-1)]: Done 120 tasks      | elapsed:  2.5min
+[Parallel(n_jobs=-1)]: Done 137 tasks      | elapsed:  2.6min
+[Parallel(n_jobs=-1)]: Done 154 tasks      | elapsed:  3.0min
+[Parallel(n_jobs=-1)]: Done 173 tasks      | elapsed:  3.3min
+[Parallel(n_jobs=-1)]: Done 192 tasks      | elapsed:  3.8min
+[Parallel(n_jobs=-1)]: Done 200 out of 200 | elapsed:  4.0min finished
+[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done 450 out of 450 | elapsed:    4.6s finished
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+GridSearchCV(cv=5, estimator=RandomForestClassifier(random_state=27, verbose=1),
+             n_jobs=-1,
+             param_grid={&#39;criterion&#39;: [&#39;gini&#39;], &#39;max_depth&#39;: [8, 9, 10, 11, 12],
+                         &#39;max_features&#39;: [&#39;auto&#39;],
+                         &#39;n_estimators&#39;: range(100, 500, 50)},
+             scoring=&#39;f1_micro&#39;, verbose=10)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">getTrainScores</span><span class="p">(</span><span class="n">gs</span><span class="p">):</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">runs</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">gs</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_test_score&#39;</span><span class="p">]),</span> <span class="n">gs</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]):</span>
+        <span class="n">results</span><span class="p">[</span><span class="n">runs</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;mean:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;params&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">runs</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">best</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;best_mean&#39;</span><span class="p">:</span> <span class="n">gs</span><span class="o">.</span><span class="n">best_score_</span><span class="p">,</span> <span class="s2">&quot;best_param&quot;</span><span class="p">:</span><span class="n">gs</span><span class="o">.</span><span class="n">best_params_</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">results</span><span class="p">,</span> <span class="n">best</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">getTrainScores</span><span class="p">(</span><span class="n">gsearch1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+({0: &#34;mean:0.9330854307594629params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 8, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 100}&#34;,
+  1: &#34;mean:0.9314735414690736params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 8, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 150}&#34;,
+  2: &#34;mean:0.9420923834233443params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 8, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 200}&#34;,
+  3: &#34;mean:0.9470515845332622params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 8, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 250}&#34;,
+  4: &#34;mean:0.9564374456210759params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 8, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 300}&#34;,
+  5: &#34;mean:0.9683011828150843params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 8, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 350}&#34;,
+  6: &#34;mean:0.9695420020850154params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 8, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 400}&#34;,
+  7: &#34;mean:0.9651175368600924params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 8, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 450}&#34;,
+  8: &#34;mean:0.9544908565023477params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 9, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 100}&#34;,
+  9: &#34;mean:0.9603282723374903params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 9, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 150}&#34;,
+  10: &#34;mean:0.9603267046567956params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 9, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 200}&#34;,
+  11: &#34;mean:0.9576732483127838params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 9, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 250}&#34;,
+  12: &#34;mean:0.9601530056358121params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 9, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 300}&#34;,
+  13: &#34;mean:0.9681232510562248params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 9, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 350}&#34;,
+  14: &#34;mean:0.9688332536428981params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 9, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 400}&#34;,
+  15: &#34;mean:0.9649385077247465params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 9, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 450}&#34;,
+  16: &#34;mean:0.9479519035562836params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 10, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 100}&#34;,
+  17: &#34;mean:0.9629959945758249params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 10, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 150}&#34;,
+  18: &#34;mean:0.9723719792752611params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 10, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 200}&#34;,
+  19: &#34;mean:0.9638735822287716params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 10, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 250}&#34;,
+  20: &#34;mean:0.9658214254920559params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 10, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 300}&#34;,
+  21: &#34;mean:0.9697191500035272params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 10, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 350}&#34;,
+  22: &#34;mean:0.9805228215117145params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 10, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 400}&#34;,
+  23: &#34;mean:0.9782202121071979params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 10, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 450}&#34;,
+  24: &#34;mean:0.9801699365873159params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 11, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 100}&#34;,
+  25: &#34;mean:0.9764473220094532params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 11, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 150}&#34;,
+  26: &#34;mean:0.9729021688862414params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 11, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 200}&#34;,
+  27: &#34;mean:0.9762698605548021params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 11, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 250}&#34;,
+  28: &#34;mean:0.9759147808774309params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 11, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 300}&#34;,
+  29: &#34;mean:0.9842375976861033params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 11, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 350}&#34;,
+  30: &#34;mean:0.9877796154479256params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 11, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 400}&#34;,
+  31: &#34;mean:0.9872486419965982params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 11, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 450}&#34;,
+  32: &#34;mean:0.9791067355401053params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 12, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 100}&#34;,
+  33: &#34;mean:0.976802871991033params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 12, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 150}&#34;,
+  34: &#34;mean:0.9835279086355693params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 12, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 200}&#34;,
+  35: &#34;mean:0.9833543663826552params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 12, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 250}&#34;,
+  36: &#34;mean:0.9883102753631141params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 12, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 300}&#34;,
+  37: &#34;mean:0.9897265181027928params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 12, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 350}&#34;,
+  38: &#34;mean:0.9911437014508884params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 12, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 400}&#34;,
+  39: &#34;mean:0.9929156509402164params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 12, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 450}&#34;},
+ {&#39;best_mean&#39;: 0.9929156509402164,
+  &#39;best_param&#39;: {&#39;criterion&#39;: &#39;gini&#39;,
+   &#39;max_depth&#39;: 12,
+   &#39;max_features&#39;: &#39;auto&#39;,
+   &#39;n_estimators&#39;: 450}})
+</pre></div></div>
+</div>
+refine the parameters<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">clf2</span> <span class="o">=</span> <span class="n">gsearch1</span><span class="o">.</span><span class="n">best_estimator_</span>
+
+<span class="n">params1</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;n_estimators&#39;</span>      <span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span><span class="mi">500</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>
+    <span class="s1">&#39;max_depth&#39;</span>         <span class="p">:</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span><span class="mi">13</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="c1">#metrics to consider: f1_micro, f1_macro, roc_auc_ovr</span>
+<span class="n">gsearch2</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">estimator</span> <span class="o">=</span> <span class="n">clf2</span><span class="p">,</span> <span class="n">param_grid</span> <span class="o">=</span> <span class="n">params1</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;f1_micro&#39;</span><span class="p">,</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">verbose</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">gsearch2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;X_train&#39;</span><span class="p">],</span> <span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=-1)]: Using backend LokyBackend with 4 concurrent workers.
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Fitting 5 folds for each of 30 candidates, totalling 150 fits
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=-1)]: Done   5 tasks      | elapsed:   14.8s
+[Parallel(n_jobs=-1)]: Done  10 tasks      | elapsed:   21.5s
+[Parallel(n_jobs=-1)]: Done  17 tasks      | elapsed:   38.1s
+[Parallel(n_jobs=-1)]: Done  24 tasks      | elapsed:   45.5s
+[Parallel(n_jobs=-1)]: Done  33 tasks      | elapsed:  1.2min
+[Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:  1.5min
+[Parallel(n_jobs=-1)]: Done  53 tasks      | elapsed:  1.8min
+[Parallel(n_jobs=-1)]: Done  64 tasks      | elapsed:  2.0min
+[Parallel(n_jobs=-1)]: Done  77 tasks      | elapsed:  2.5min
+[Parallel(n_jobs=-1)]: Done  90 tasks      | elapsed:  3.0min
+[Parallel(n_jobs=-1)]: Done 105 tasks      | elapsed:  3.4min
+[Parallel(n_jobs=-1)]: Done 120 tasks      | elapsed:  3.8min
+[Parallel(n_jobs=-1)]: Done 137 tasks      | elapsed:  4.3min
+[Parallel(n_jobs=-1)]: Done 150 out of 150 | elapsed:  4.7min finished
+[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done 440 out of 440 | elapsed:    4.7s finished
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+GridSearchCV(cv=5,
+             estimator=RandomForestClassifier(max_depth=12, n_estimators=450,
+                                              random_state=27, verbose=1),
+             n_jobs=-1,
+             param_grid={&#39;max_depth&#39;: [11, 12, 13],
+                         &#39;n_estimators&#39;: range(400, 500, 10)},
+             scoring=&#39;f1_micro&#39;, verbose=10)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">getTrainScores</span><span class="p">(</span><span class="n">gsearch2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+({0: &#34;mean:0.9877796154479256params{&#39;max_depth&#39;: 11, &#39;n_estimators&#39;: 400}&#34;,
+  1: &#34;mean:0.9877788316075782params{&#39;max_depth&#39;: 11, &#39;n_estimators&#39;: 410}&#34;,
+  2: &#34;mean:0.9872480149243202params{&#39;max_depth&#39;: 11, &#39;n_estimators&#39;: 420}&#34;,
+  3: &#34;mean:0.9874253196109016params{&#39;max_depth&#39;: 11, &#39;n_estimators&#39;: 430}&#34;,
+  4: &#34;mean:0.9897271451750708params{&#39;max_depth&#39;: 11, &#39;n_estimators&#39;: 440}&#34;,
+  5: &#34;mean:0.9872486419965982params{&#39;max_depth&#39;: 11, &#39;n_estimators&#39;: 450}&#34;,
+  6: &#34;mean:0.9886653550404854params{&#39;max_depth&#39;: 11, &#39;n_estimators&#39;: 460}&#34;,
+  7: &#34;mean:0.9886656685766242params{&#39;max_depth&#39;: 11, &#39;n_estimators&#39;: 470}&#34;,
+  8: &#34;mean:0.9897274587112097params{&#39;max_depth&#39;: 11, &#39;n_estimators&#39;: 480}&#34;,
+  9: &#34;mean:0.9879564498302985params{&#39;max_depth&#39;: 11, &#39;n_estimators&#39;: 490}&#34;,
+  10: &#34;mean:0.9911437014508884params{&#39;max_depth&#39;: 12, &#39;n_estimators&#39;: 400}&#34;,
+  11: &#34;mean:0.9918519795887974params{&#39;max_depth&#39;: 12, &#39;n_estimators&#39;: 410}&#34;,
+  12: &#34;mean:0.9913205358332615params{&#39;max_depth&#39;: 12, &#39;n_estimators&#39;: 420}&#34;,
+  13: &#34;mean:0.9918529201972142params{&#39;max_depth&#39;: 12, &#39;n_estimators&#39;: 430}&#34;,
+  14: &#34;mean:0.9943318936798953params{&#39;max_depth&#39;: 12, &#39;n_estimators&#39;: 440}&#34;,
+  15: &#34;mean:0.9929156509402164params{&#39;max_depth&#39;: 12, &#39;n_estimators&#39;: 450}&#34;,
+  16: &#34;mean:0.9939780681470797params{&#39;max_depth&#39;: 12, &#39;n_estimators&#39;: 460}&#34;,
+  17: &#34;mean:0.993269476473032params{&#39;max_depth&#39;: 12, &#39;n_estimators&#39;: 470}&#34;,
+  18: &#34;mean:0.993269162936893params{&#39;max_depth&#39;: 12, &#39;n_estimators&#39;: 480}&#34;,
+  19: &#34;mean:0.9916753019744938params{&#39;max_depth&#39;: 12, &#39;n_estimators&#39;: 490}&#34;,
+  20: &#34;mean:0.9847659060802496params{&#39;max_depth&#39;: 13, &#39;n_estimators&#39;: 400}&#34;,
+  21: &#34;mean:0.9863602373468572params{&#39;max_depth&#39;: 13, &#39;n_estimators&#39;: 410}&#34;,
+  22: &#34;mean:0.9865376988015081params{&#39;max_depth&#39;: 13, &#39;n_estimators&#39;: 420}&#34;,
+  23: &#34;mean:0.9881320300681157params{&#39;max_depth&#39;: 13, &#39;n_estimators&#39;: 430}&#34;,
+  24: &#34;mean:0.9890176128926059params{&#39;max_depth&#39;: 13, &#39;n_estimators&#39;: 440}&#34;,
+  25: &#34;mean:0.9890176128926059params{&#39;max_depth&#39;: 13, &#39;n_estimators&#39;: 450}&#34;,
+  26: &#34;mean:0.9881317165319767params{&#39;max_depth&#39;: 13, &#39;n_estimators&#39;: 460}&#34;,
+  27: &#34;mean:0.9888403082060246params{&#39;max_depth&#39;: 13, &#39;n_estimators&#39;: 470}&#34;,
+  28: &#34;mean:0.988485855600931params{&#39;max_depth&#39;: 13, &#39;n_estimators&#39;: 480}&#34;,
+  29: &#34;mean:0.9868916811023931params{&#39;max_depth&#39;: 13, &#39;n_estimators&#39;: 490}&#34;},
+ {&#39;best_mean&#39;: 0.9943318936798953,
+  &#39;best_param&#39;: {&#39;max_depth&#39;: 12, &#39;n_estimators&#39;: 440}})
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">clf2</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">[</span><span class="mi">4</span><span class="p">,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done 450 out of 450 | elapsed:    0.3s finished
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([0])
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Xgboost">
+<h2>Xgboost<a class="headerlink" href="#Xgboost" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">xgboost</span> <span class="k">as</span> <span class="nn">xgb</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">xgboost.sklearn</span> <span class="kn">import</span> <span class="n">XGBClassifier</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+</pre></div>
+</div>
+</div>
+Create function to plot and fit our Xgboost model<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">#allow logloss and classification error plots for each iteraetion of xgb model</span>
+<span class="k">def</span> <span class="nf">plot_compare</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span><span class="n">eval_results</span><span class="p">,</span><span class="n">epochs</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">metrics</span><span class="p">:</span>
+        <span class="n">test_score</span> <span class="o">=</span> <span class="n">eval_results</span><span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">][</span><span class="n">m</span><span class="p">]</span>
+        <span class="n">train_score</span> <span class="o">=</span> <span class="n">eval_results</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">][</span><span class="n">m</span><span class="p">]</span>
+        <span class="n">rang</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">epochs</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.figsize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rang</span><span class="p">,</span> <span class="n">test_score</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Val&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rang</span><span class="p">,</span> <span class="n">train_score</span><span class="p">,</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Train&quot;</span><span class="p">)</span>
+        <span class="n">title_name</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="s2">&quot; plot&quot;</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title_name</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iterations&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="n">lgd</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">fitXgb</span><span class="p">(</span><span class="n">sk_model</span><span class="p">,</span> <span class="n">training_data</span><span class="o">=</span><span class="n">training_data</span><span class="p">,</span><span class="n">epochs</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Fitting model...&#39;</span><span class="p">)</span>
+    <span class="n">sk_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;X_train&#39;</span><span class="p">],</span> <span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Fitting done!&#39;</span><span class="p">)</span>
+    <span class="n">train</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">DMatrix</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;X_train&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_train&#39;</span><span class="p">])</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">DMatrix</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;X_val&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_val&#39;</span><span class="p">])</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">sk_model</span><span class="o">.</span><span class="n">get_xgb_params</span><span class="p">()</span>
+    <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mlogloss&#39;</span><span class="p">,</span><span class="s1">&#39;merror&#39;</span><span class="p">]</span>
+    <span class="n">params</span><span class="p">[</span><span class="s1">&#39;eval_metric&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metrics</span>
+    <span class="n">store</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">evallist</span> <span class="o">=</span> <span class="p">[(</span><span class="n">val</span><span class="p">,</span> <span class="s1">&#39;val&#39;</span><span class="p">),(</span><span class="n">train</span><span class="p">,</span><span class="s1">&#39;train&#39;</span><span class="p">)]</span>
+    <span class="n">xgb_model</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span> <span class="n">evallist</span><span class="p">,</span><span class="n">evals_result</span><span class="o">=</span><span class="n">store</span><span class="p">,</span><span class="n">verbose_eval</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-- Model Report --&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;XGBoost Accuracy: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">sk_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;X_test&#39;</span><span class="p">]),</span> <span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_test&#39;</span><span class="p">])))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;XGBoost F1-Score (Micro): &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">f1_score</span><span class="p">(</span><span class="n">sk_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;X_test&#39;</span><span class="p">]),</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_test&#39;</span><span class="p">],</span><span class="n">average</span><span class="o">=</span><span class="s1">&#39;micro&#39;</span><span class="p">)))</span>
+    <span class="n">plot_compare</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span><span class="n">store</span><span class="p">,</span><span class="n">epochs</span><span class="p">)</span>
+
+    <span class="n">plot_compare</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span><span class="n">store</span><span class="p">,</span><span class="n">epochs</span><span class="p">)</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="n">column_nan</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+    <span class="n">plot</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">sk_model</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Feature Importance&#39;</span><span class="p">)</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">plot</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span><span class="n">rotation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">#initial model</span>
+<span class="n">xgb1</span> <span class="o">=</span> <span class="n">XGBClassifier</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                    <span class="n">n_estimators</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+                    <span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                    <span class="n">min_child_weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">gamma</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="n">subsample</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+                    <span class="n">colsample_bytree</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+                    <span class="n">objective</span><span class="o">=</span><span class="s1">&#39;multi:softmax&#39;</span><span class="p">,</span>
+                    <span class="n">nthread</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                    <span class="n">num_class</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span>
+                    <span class="n">seed</span><span class="o">=</span><span class="mi">27</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fitXgb</span><span class="p">(</span><span class="n">xgb1</span><span class="p">,</span> <span class="n">training_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Fitting model...
+Fitting done!
+[0]     val-mlogloss:1.76254    val-merror:0.00000      train-mlogloss:1.76253  train-merror:0.00000
+[100]   val-mlogloss:0.00055    val-merror:0.00000      train-mlogloss:0.00053  train-merror:0.00000
+[200]   val-mlogloss:0.00028    val-merror:0.00000      train-mlogloss:0.00028  train-merror:0.00000
+[299]   val-mlogloss:0.00025    val-merror:0.00000      train-mlogloss:0.00025  train-merror:0.00000
+-- Model Report --
+XGBoost Accuracy: 1.0
+XGBoost F1-Score (Micro): 1.0
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Model_building_For_balanced_dataset_32_1.png" src="_images/Model_building_For_balanced_dataset_32_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Model_building_For_balanced_dataset_32_2.png" src="_images/Model_building_For_balanced_dataset_32_2.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Model_building_For_balanced_dataset_32_3.png" src="_images/Model_building_For_balanced_dataset_32_3.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Model_building_For_balanced_dataset_32_4.png" src="_images/Model_building_For_balanced_dataset_32_4.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Model_building_For_balanced_dataset_32_5.png" src="_images/Model_building_For_balanced_dataset_32_5.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Gradient-boosting">
+<h2>Gradient boosting<a class="headerlink" href="#Gradient-boosting" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">GradientBoostingClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">confusion_matrix</span>
+</pre></div>
+</div>
+</div>
+create model and test different estimator<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">n_estimator</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span><span class="mi">400</span><span class="p">,</span><span class="mi">500</span><span class="p">,</span><span class="mi">600</span><span class="p">,</span><span class="mi">800</span><span class="p">,</span><span class="mi">1000</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">for</span> <span class="n">estimator</span> <span class="ow">in</span> <span class="n">n_estimator</span><span class="p">:</span>
+    <span class="n">gb_clf</span> <span class="o">=</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">max_features</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">gb_clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;X_train&#39;</span><span class="p">],</span> <span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;n_estimator: &quot;</span><span class="p">,</span> <span class="n">estimator</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Accuracy score (training): </span><span class="si">{0:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gb_clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Accuracy score (validation): </span><span class="si">{0:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gb_clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_val</span><span class="p">,</span> <span class="n">Y_val</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+n_estimator:  100
+Accuracy score (training): 1.000
+Accuracy score (validation): 0.953
+n_estimator:  200
+Accuracy score (training): 1.000
+Accuracy score (validation): 0.961
+n_estimator:  300
+Accuracy score (training): 1.000
+Accuracy score (validation): 0.961
+n_estimator:  400
+Accuracy score (training): 1.000
+Accuracy score (validation): 0.966
+n_estimator:  500
+Accuracy score (training): 1.000
+Accuracy score (validation): 0.969
+n_estimator:  600
+Accuracy score (training): 1.000
+Accuracy score (validation): 0.971
+n_estimator:  800
+Accuracy score (training): 1.000
+Accuracy score (validation): 0.984
+n_estimator:  1000
+Accuracy score (training): 1.000
+Accuracy score (validation): 0.993
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">predicted_labels</span> <span class="o">=</span> <span class="n">clf_balanced</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;X_test&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done 100 out of 100 | elapsed:    0.0s finished
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_test&#39;</span><span class="p">],</span> <span class="n">predicted_labels</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1.0
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Accuracy score (training): </span><span class="si">{0:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gb_clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Accuracy score (validation): </span><span class="si">{0:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gb_clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_val</span><span class="p">,</span> <span class="n">Y_val</span><span class="p">)))</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Accuracy score (training): 1.000
+Accuracy score (validation): 0.993
+</pre></div></div>
+</div>
+Put ultimate estimator<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">gb_clf2</span> <span class="o">=</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">max_features</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">gb_clf2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">)</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">gb_clf2</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_val</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Confusion Matrix:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">Y_val</span><span class="p">,</span> <span class="n">predictions</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Classification Report&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">Y_val</span><span class="p">,</span> <span class="n">predictions</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/juseimandi/opt/anaconda3/envs/myenv/lib/python3.7/site-packages/sklearn/utils/validation.py:72: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+  return f(**kwargs)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Confusion Matrix:
+[[470   1]
+ [  6 465]]
+Classification Report
+              precision    recall  f1-score   support
+
+           0       0.99      1.00      0.99       471
+           1       1.00      0.99      0.99       471
+
+    accuracy                           0.99       942
+   macro avg       0.99      0.99      0.99       942
+weighted avg       0.99      0.99      0.99       942
+
+</pre></div></div>
+</div>
+<div class="section" id="Bibliographie">
+<h3>Bibliographie<a class="headerlink" href="#Bibliographie" title="Permalink to this headline">¶</a></h3>
+https://towardsdatascience.com/xgboost-for-multi-class-classification-799d96bcd368https://stackabuse.com/gradient-boosting-classifiers-in-python-with-scikit-learn/<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Machine learning Finance use case</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Feature%20engineering.html">Feature engineering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Import%20data%20and%20data%20cleaning.html">Import data and data cleaning</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Model building For balanced dataset</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Prepared-dataset">Prepared dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Random-Forest">Random Forest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Xgboost">Xgboost</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Gradient-boosting">Gradient boosting</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Import%20data%20and%20data%20cleaning.html" title="previous chapter">Import data and data cleaning</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Seimandi Juliette and Gilles Robin.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/Model building For balanced dataset.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
