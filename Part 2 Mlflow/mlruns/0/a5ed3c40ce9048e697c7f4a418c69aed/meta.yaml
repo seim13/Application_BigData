@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/Gilles/Documents/application%20for%20bd/Application_BigData-main/mlruns/0/a5ed3c40ce9048e697c7f4a418c69aed/artifacts
+end_time: 1603915522777
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: a5ed3c40ce9048e697c7f4a418c69aed
+run_uuid: a5ed3c40ce9048e697c7f4a418c69aed
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1603915518605
+status: 3
+tags: []
+user_id: Gilles
