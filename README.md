@@ -46,7 +46,7 @@ Realised by Gilles Robin and Juliette Seimandi
   
 <h3> Part 2 </h3>
 <p> In this part we introduce MLFlow to our project, in order to be able to track the parameters of our models.</p>
-<p> You an unzip it and see the ML models by using the command MLflow ui in a terminal. if you want to rexecute the python scripts you have to put them in the same folder as the one containing the csv created by running "Import data and data cleaning.ipynb" and Feature engineering.ipynb.   </p>
+<p> You can unzip the Part2.zip and see the ML models by using the command MLflow ui in a terminal. if you want to reexecute the python scripts you have to put them in the same folder as the one containing the csv created by running "Import data and data cleaning.ipynb" and Feature engineering.ipynb.   </p>
 <h3> Part 3 </h3>
 
 <p> We have to use SHAP library to have a better understanding of our performance. You can find our shap implemantation in the file <strong><em>XAI with SHAP method.ipynb</strong></em>  </p> 
