@@ -2,7 +2,7 @@
 
 <h2> Part 1 of the project for Advanced BigData Systems 2020-2021 <h2>
 <br>
-Realise by Gilles Robin and Juliette Seimandi
+Realised by Gilles Robin and Juliette Seimandi
  
 <br>
 
@@ -20,33 +20,33 @@ Realise by Gilles Robin and Juliette Seimandi
 
 <h3> Part 1 </h3>
 
-<p>We use DataSet of Home credit risk classification in this project, you can find those dataset in https://www.kaggle.com/c/home-credit-default-risk/data </p>
+<p>We use a DataSet of Home credit risk classification in this project, you can find this dataset at https://www.kaggle.com/c/home-credit-default-risk/data </p>
   
 <p>Download application_train.csv and application_test.csv and put it in your home directory with allother file</p>
 
-<p>You can find our load an analise of the data in the <strong><em> Import data and data cleaning.ipynb </strong></em> then our feature engineering in the <strong><em> Feature engineering.ipynb </strong></em> with the creation of new and clean data set that will be used in our machine learning model</p>
+<p>You can find our load an analyse of the data in the <strong><em> Import data and data cleaning.ipynb </strong></em> then our feature engineering in the <strong><em> Feature engineering.ipynb </strong></em> with the creation of new and clean data set that will be used in our machine learning model</p>
 
 <p>Then we build Xgboost, Random Forest and Gradient Boosting and improve all model in the file <strong><em> Model building For balanced dataset.ipynb </strong></em> </p> 
 <br>
 <h3> Sphinx Documentation </h3>
 <br>
- <p>To have a better view of our model you can check our Sphinx documentation, to do so :</p>
+ <p>To get a better view of our model you can check our Sphinx documentation, to do so :</p>
 <br>
 <ul>
-<li>  Clone this git repositry </ li>
+<li>  Clone this git repository </ li>
   <br>
 <li>  launch a terminal </li>
   <br>
 <li> go to the git repository and launch the command <em> open build/html/index.html </em> </li>
  </ul>
    <br>
- <p>Then you will be abbale to understand all our project.</p>
+ <p>Then you will be able to understand all our project.</p>
   
 <h3> Part 2 </h3>
-
+<p> In this part we introduce MLFlow to our project, in order to be able to track the parameters of our models</p>
 <h3> Part 3 </h3>
 
 <p> We have to use SHAP library to have a better understanding of our performance. You can find our shap implemantation in the file <strong><em>XAI with SHAP method.ipynb</strong></em>  </p> 
-<p> Infortunatly we can visualise our graph in the sphinx documentation because it doesn't compile the java script package but if you run the fil on your own computeur you will be able to have them</p>
+<p> Infortunatly we cannot visualise our graph in the sphinx documentation because it doesn't compile the java script package but if you run the file on your own computer you will be able to have them</p>
 
 
