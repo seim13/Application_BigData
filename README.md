@@ -27,6 +27,8 @@ Realised by Gilles Robin and Juliette Seimandi
 <p>You can find our load an analyse of the data in the <strong><em> Import data and data cleaning.ipynb </strong></em> then our feature engineering in the <strong><em> Feature engineering.ipynb </strong></em> with the creation of new and clean data set that will be used in our machine learning model</p>
 
 <p>Then we build Xgboost, Random Forest and Gradient Boosting and improve all model in the file <strong><em> Model building For balanced dataset.ipynb </strong></em> </p> 
+ <p> You can see our parameter in the <strong><em>applicationOfBDEnvironment.yml file</em></strong> </p>
+
 <br>
 <h3> Sphinx Documentation </h3>
 <br>
