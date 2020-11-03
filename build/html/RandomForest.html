@@ -1,0 +1,325 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>&lt;no title&gt; &#8212; Project 1 of application of big data 3/11/2020 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="Gradient%20Boosting.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="Xgboost.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <p>#!/usr/bin/env python
+# coding: utf-8</p>
+<p># # Application of BigData Part 1</p>
+<p># ## Model building For balanced dataset</p>
+<p># In[32]:</p>
+<p>import pandas as pd
+import numpy as np
+import sklearn
+import plotly.express as px
+import plotly.graph_objects as go
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import QuantileTransformer
+from sklearn.ensemble import RandomForestClassifier
+import mlflow
+import mlflow.sklearn
+from urllib.parse import urlparse</p>
+<p>import matplotlib.pyplot as plt
+from sklearn.metrics import accuracy_score, f1_score
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import classification_report</p>
+<p># In[79]:</p>
+<p>df_balanced=pd.read_csv(‘df_balanced.csv’)
+df_test=pd.read_csv(‘df_clean_test.csv’)</p>
+<p># In[81]:</p>
+<p>column=df_balanced.columns.tolist()</p>
+<p># In[82]:</p>
+<dl>
+<dt>def stratified_split(df, target, val_percent=0.2):</dt><dd><p>‘’’
+Function to split a dataframe into train and validation sets, while preserving the ratio of the labels in the target variable
+Inputs:
+- df, the dataframe
+- target, the target variable
+- val_percent, the percentage of validation samples, default 0.2
+Outputs:
+- train_idxs, the indices of the training dataset
+- val_idxs, the indices of the validation dataset
+‘’’
+classes=list(df[target].unique())
+train_idxs, val_idxs = [], []
+for c in classes:</p>
+<blockquote>
+<div><p>idx=list(df[df[target]==c].index)
+np.random.shuffle(idx)
+val_size=int(len(idx)*val_percent)
+val_idxs+=idx[:val_size]
+train_idxs+=idx[val_size:]</p>
+</div></blockquote>
+<p>return train_idxs, val_idxs</p>
+</dd>
+</dl>
+<p>train_idxs, val_idxs = stratified_split(df_balanced, ‘TARGET’, val_percent=0.25)</p>
+<p>val_idxs, test_idxs = stratified_split(df_balanced[df_balanced.index.isin(val_idxs)], ‘TARGET’, val_percent=0.5)</p>
+<p># In[83]:</p>
+<p>train_df = df_balanced[df_balanced.index.isin(train_idxs)]</p>
+<p>X_train = train_df[column].values
+Y_train = train_df[[‘TARGET’]].values
+print(‘Retrieved Training Data’)</p>
+<p>val_df = df_balanced[df_balanced.index.isin(val_idxs)]
+X_val = val_df[column].values
+Y_val = val_df[[‘TARGET’]].values
+print(‘Retrieved Validation Data’)</p>
+<p>test_df = df_balanced[df_balanced.index.isin(test_idxs)]
+X_test = test_df[column].values
+Y_test = test_df[[‘TARGET’]].values
+print(‘Retrieved Test Data’)</p>
+<p># In[84]:</p>
+<p>#store data, all in numpy arrays
+training_data = {‘X_train’:X_train,’Y_train’:Y_train,</p>
+<blockquote>
+<div><p>‘X_val’: X_val,’Y_val’:Y_val,
+‘X_test’: X_test,’Y_test’:Y_test}</p>
+</div></blockquote>
+<p># In[26]:
+with mlflow.start_run():</p>
+<blockquote>
+<div><p>clf_balanced = RandomForestClassifier(random_state=27,max_depth = 12, n_estimators = 200)
+clf_balanced.fit(training_data[‘X_train’], training_data[‘Y_train’].reshape(training_data[‘Y_train’].shape[0],))</p>
+<p># In[28]:</p>
+<p>predicted_labels = clf_balanced.predict(training_data[‘X_test’])</p>
+<p># In[29]:</p>
+<p>accuracy = accuracy_score(training_data[‘Y_test’], predicted_labels)</p>
+<p>mlflow.log_param(“random_state”,  27)
+mlflow.log_param(“max_depth”, 12)
+mlflow.log_param(“n_estimators”, 200)</p>
+<p>mlflow.log_metric(“accuracy”, accuracy)</p>
+<p>tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme</p>
+<p># Model registry does not work with file store
+if tracking_url_type_store != “file”:</p>
+<blockquote>
+<div><p># Register the model
+# There are other ways to use the Model Registry, which depends on the use case,
+# please refer to the doc for more information:
+# <a class="reference external" href="https://mlflow.org/docs/latest/model-registry.html#api-workflow">https://mlflow.org/docs/latest/model-registry.html#api-workflow</a>
+mlflow.sklearn.log_model(clf_balanced, “model”, registered_model_name=”RandomForestClassifier”)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>mlflow.sklearn.log_model(clf_balanced, “RandomForestClassifier”)</p>
+</dd>
+</dl>
+<p># In[30]:</p>
+</div></blockquote>
+<dl>
+<dt>“””</dt><dd><dl class="simple">
+<dt>params = {</dt><dd><p>‘n_estimators’      : range(100,500,50),
+‘max_depth’         : [8, 9, 10, 11, 12],
+‘max_features’: [‘auto’],
+‘criterion’ :[‘gini’]</p>
+</dd>
+</dl>
+<p>}
+#metrics to consider: f1_micro, f1_macro, roc_auc_ovr
+gsearch1 = GridSearchCV(estimator = clf, param_grid = params, scoring=’f1_micro’,n_jobs=-1,verbose = 10, cv=5)
+gsearch1.fit(training_data[‘X_train’], training_data[‘Y_train’].reshape(training_data[‘Y_train’].shape[0],))</p>
+</dd>
+</dl>
+<p># In[34]:</p>
+<dl>
+<dt>def getTrainScores(gs):</dt><dd><p>results = {}
+runs = 0
+for x,y in zip(list(gs.cv_results_[‘mean_test_score’]), gs.cv_results_[‘params’]):</p>
+<blockquote>
+<div><p>results[runs] = ‘mean:’ + str(x) + ‘params’ + str(y)
+runs += 1</p>
+</div></blockquote>
+<p>best = {‘best_mean’: <a href="#id1"><span class="problematic" id="id2">gs.best_score_</span></a>, “best_param”:<a href="#id3"><span class="problematic" id="id4">gs.best_params_</span></a>}
+return results, best</p>
+</dd>
+</dl>
+<p># In[35]:</p>
+<p>getTrainScores(gsearch1)</p>
+<p># In[38]:</p>
+<p>clf2 = <a href="#id5"><span class="problematic" id="id6">gsearch1.best_estimator_</span></a></p>
+<dl class="simple">
+<dt>params1 = {</dt><dd><p>‘n_estimators’      : range(90,110,10),
+‘max_depth’         : [9, 10,11]</p>
+</dd>
+</dl>
+<p>}
+#metrics to consider: f1_micro, f1_macro, roc_auc_ovr
+gsearch2 = GridSearchCV(estimator = clf2, param_grid = params1, scoring=’f1_micro’,n_jobs=-1,verbose = 10, cv=5)
+gsearch2.fit(training_data[‘X_train’], training_data[‘Y_train’].reshape(training_data[‘Y_train’].shape[0],))</p>
+<p># In[39]:</p>
+<p>getTrainScores(gsearch2)</p>
+<p># In[88]:</p>
+<p>clf2.predict(X_test[4,:].reshape(1,-1))</p>
+<p># In[89]:</p>
+<p># In[ ]:</p>
+<p># In[40]:</p>
+<p>import xgboost as xgb
+import matplotlib.pyplot as plt
+from xgboost.sklearn import XGBClassifier
+import seaborn as sns</p>
+<p># In[47]:</p>
+<p>#allow logloss and classification error plots for each iteraetion of xgb model
+def plot_compare(metrics,eval_results,epochs):</p>
+<blockquote>
+<div><dl class="simple">
+<dt>for m in metrics:</dt><dd><p>test_score = eval_results[‘val’][m]
+train_score = eval_results[‘train’][m]
+rang = range(0, epochs)
+plt.rcParams[“figure.figsize”] = [6,6]
+plt.plot(rang, test_score,”c”, label=”Val”)
+plt.plot(rang, train_score,”orange”, label=”Train”)
+title_name = m + ” plot”
+plt.title(title_name)
+plt.xlabel(‘Iterations’)
+plt.ylabel(m)
+lgd = plt.legend()
+plt.show()</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl>
+<dt>def fitXgb(sk_model, training_data=training_data,epochs=300):</dt><dd><p>print(‘Fitting model…’)
+sk_model.fit(training_data[‘X_train’], training_data[‘Y_train’].reshape(training_data[‘Y_train’].shape[0],))
+print(‘Fitting done!’)
+train = xgb.DMatrix(training_data[‘X_train’], label=training_data[‘Y_train’])
+val = xgb.DMatrix(training_data[‘X_val’], label=training_data[‘Y_val’])
+params = sk_model.get_xgb_params()
+metrics = [‘mlogloss’,’merror’]
+params[‘eval_metric’] = metrics
+store = {}
+evallist = [(val, ‘val’),(train,’train’)]
+xgb_model = xgb.train(params, train, epochs, evallist,evals_result=store,verbose_eval=100)
+print(‘– Model Report –’)
+print(‘XGBoost Accuracy: ‘+str(accuracy_score(sk_model.predict(training_data[‘X_test’]), training_data[‘Y_test’])))
+print(‘XGBoost F1-Score (Micro): ‘+str(f1_score(sk_model.predict(training_data[‘X_test’]),training_data[‘Y_test’],average=’micro’)))
+plot_compare(metrics,store,epochs)</p>
+<p>plot_compare(metrics,store,epochs)
+features = column
+f, ax = plt.subplots(figsize=(10,5))
+plot = sns.barplot(x=features, y=sk_model.feature_importances_)
+ax.set_title(‘Feature Importance’)
+plot.set_xticklabels(plot.get_xticklabels(),rotation=’vertical’)
+plt.show()</p>
+</dd>
+</dl>
+<p># In[48]:</p>
+<p>#initial model
+xgb1 = XGBClassifier(learning_rate=0.1,</p>
+<blockquote>
+<div><p>n_estimators=500,
+max_depth=5,
+min_child_weight=1,
+gamma=0,
+subsample=0.8,
+colsample_bytree=0.8,
+objective=’multi:softmax’,
+nthread=4,
+num_class=9,
+seed=27)</p>
+</div></blockquote>
+<p># In[49]:</p>
+<p>fitXgb(xgb1, training_data)</p>
+<p>“””</p>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Project 1 of application of big data</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Import%20data%20and%20data%20cleaning.html">Import data and data cleaning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Feature%20engineering.html">Feature engineering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Model%20building%20For%20balanced%20dataset.html">Model building For balanced dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="XAI%20with%20SHAP%20method.html">XAI with SHAP method</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Xgboost.html" title="previous chapter">&lt;no title&gt;</a></li>
+      <li>Next: <a href="Gradient%20Boosting.html" title="next chapter">&lt;no title&gt;</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Robin gilles and Seimandi juliette.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/RandomForest.py.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

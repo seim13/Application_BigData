@@ -17,12 +17,12 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Machine learning Finance use case'
-copyright = '2020, Seimandi Juliette and Gilles Robin'
-author = 'Seimandi Juliette and Gilles Robin'
+project = 'Project 1 of application of big data'
+copyright = '2020, Robin gilles and Seimandi juliette'
+author = 'Robin gilles and Seimandi juliette'
 
 # The full version, including alpha/beta/rc tags
-release = '28/10/2020'
+release = '3/11/2020'
 
 
 # -- General configuration ---------------------------------------------------
@@ -44,6 +44,7 @@ templates_path = ['_templates']
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
+source_suffix = ['.rst', '.ipynb','.py']
 
 
 # -- Options for HTML output -------------------------------------------------

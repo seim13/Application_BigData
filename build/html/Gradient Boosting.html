@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>&lt;no title&gt; &#8212; Project 1 of application of big data 3/11/2020 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="RandomForest.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <p>#!/usr/bin/env python
+# coding: utf-8</p>
+<p># # Model building For balanced dataset</p>
+<p># ## Prepared dataset</p>
+<p># In[11]:</p>
+<p>import pandas as pd
+import numpy as np
+import sklearn
+import plotly.express as px
+import plotly.graph_objects as go
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import QuantileTransformer
+from sklearn.ensemble import RandomForestClassifier</p>
+<p>import matplotlib.pyplot as plt
+from sklearn.metrics import accuracy_score, f1_score
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import classification_report</p>
+<p>import mlflow
+import mlflow.sklearn
+from urllib.parse import urlparse
+import pickle</p>
+<p>df_balanced=pd.read_csv(‘df_balanced.csv’)
+df_test=pd.read_csv(‘df_clean_test.csv’)</p>
+<p># In[3]:</p>
+<p>#df_test.drop(‘Unnamed: 0’, axis=1, inplace=True)</p>
+<p># In[31]:</p>
+<p>df_balanced</p>
+<p># In[37]:</p>
+<p>column_nan=df_balanced.columns.tolist()</p>
+<p># In[38]:</p>
+<p>column_nan</p>
+<p># In[33]:</p>
+<p>column_test=df_test.columns.tolist()</p>
+<dl>
+<dt>def stratified_split(df, target, val_percent=0.2):</dt><dd><p>‘’’
+Function to split a dataframe into train and validation sets, while preserving the ratio of the labels in the target variable
+Inputs:
+- df, the dataframe
+- target, the target variable
+- val_percent, the percentage of validation samples, default 0.2
+Outputs:
+- train_idxs, the indices of the training dataset
+- val_idxs, the indices of the validation dataset
+‘’’
+classes=list(df[target].unique())
+train_idxs, val_idxs = [], []
+for c in classes:</p>
+<blockquote>
+<div><p>idx=list(df[df[target]==c].index)
+np.random.shuffle(idx)
+val_size=int(len(idx)*val_percent)
+val_idxs+=idx[:val_size]
+train_idxs+=idx[val_size:]</p>
+</div></blockquote>
+<p>return train_idxs, val_idxs</p>
+</dd>
+</dl>
+<p>train_idxs, val_idxs = stratified_split(df_balanced, ‘TARGET’, val_percent=0.25)</p>
+<p>val_idxs, test_idxs = stratified_split(df_balanced[df_balanced.index.isin(val_idxs)], ‘TARGET’, val_percent=0.5)</p>
+<p># In[40]:</p>
+<p>train_df = df_balanced[df_balanced.index.isin(train_idxs)]</p>
+<p>X_train = train_df[column_nan].values
+Y_train = train_df[[‘TARGET’]].values
+print(‘Retrieved Training Data’)
+print(X_train.shape,’—-‘,Y_train.shape)</p>
+<p>val_df = df_balanced[df_balanced.index.isin(val_idxs)]
+X_val = val_df[column_nan].values
+Y_val = val_df[[‘TARGET’]].values
+print(‘Retrieved Validation Data’)
+print(X_val.shape,’—-‘,Y_val.shape)</p>
+<p>test_df = df_balanced[df_balanced.index.isin(test_idxs)]
+X_test = test_df[column_nan].values
+Y_test = test_df[[‘TARGET’]].values
+print(‘Retrieved Test Data’)
+print(X_test.shape,’—-‘,Y_test.shape)</p>
+<p># In[41]:</p>
+<p>#store data, all in numpy arrays
+training_data = {‘X_train’:X_train,’Y_train’:Y_train,</p>
+<blockquote>
+<div><p>‘X_val’: X_val,’Y_val’:Y_val,
+‘X_test’: X_test,’Y_test’:Y_test}</p>
+</div></blockquote>
+<p># ## Random Forest</p>
+<p>import xgboost as xgb
+import matplotlib.pyplot as plt
+from xgboost.sklearn import XGBClassifier
+import seaborn as sns</p>
+<p>from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.metrics import classification_report, confusion_matrix</p>
+<p># In[32]:</p>
+<p>with mlflow.start_run():</p>
+<blockquote>
+<div><p>gb_clf = GradientBoostingClassifier(n_estimators=1000, learning_rate=0.01, max_features=2, max_depth=12, random_state=0)
+gb_clf.fit(training_data[‘X_train’], training_data[‘Y_train’].reshape(training_data[‘Y_train’].shape[0]))</p>
+</div></blockquote>
+<p># In[33]:</p>
+<blockquote>
+<div><p>predicted_labels = gb_clf.predict(training_data[‘X_test’])</p>
+</div></blockquote>
+<p># In[35]:</p>
+<blockquote>
+<div><p>mlflow.log_param(“random_state”,  0)
+mlflow.log_param(“max_depth”, 12)
+mlflow.log_param(“n_estimators”, 1000)
+mlflow.log_param(“learning_rate”, 0.01)
+mlflow.log_metric(“accuracy_train”, gb_clf.score(X_train, Y_train))
+mlflow.log_metric(“accuracy_validation”, gb_clf.score(X_val, Y_val))
+mlflow.log_metric(“accuracy_score”, accuracy_score(training_data[‘Y_test’], predicted_labels))</p>
+<p>tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme</p>
+<p># Model registry does not work with file store
+if tracking_url_type_store != “file”:</p>
+<blockquote>
+<div><p># Register the model
+# There are other ways to use the Model Registry, which depends on the use case,
+# please refer to the doc for more information:
+# <a class="reference external" href="https://mlflow.org/docs/latest/model-registry.html#api-workflow">https://mlflow.org/docs/latest/model-registry.html#api-workflow</a>
+mlflow.sklearn.log_model(gb_clf, “model”, registered_model_name=”GradientBoosting”)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>mlflow.sklearn.log_model(gb_clf, “GradientBoosting”)</p>
+</dd>
+</dl>
+</div></blockquote>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Project 1 of application of big data</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Import%20data%20and%20data%20cleaning.html">Import data and data cleaning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Feature%20engineering.html">Feature engineering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Model%20building%20For%20balanced%20dataset.html">Model building For balanced dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="XAI%20with%20SHAP%20method.html">XAI with SHAP method</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="RandomForest.html" title="previous chapter">&lt;no title&gt;</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Robin gilles and Seimandi juliette.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/Gradient Boosting.py.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

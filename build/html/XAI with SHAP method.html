@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>XAI with SHAP method &#8212; Machine learning Finance use case 28/10/2020 documentation</title>
+    <title>XAI with SHAP method &#8212; Project 1 of application of big data 3/11/2020 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -16,6 +16,8 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="Xgboost.html" />
+    <link rel="prev" title="Model building For balanced dataset" href="Model%20building%20For%20balanced%20dataset.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -294,11 +296,11 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 pip install shap==0.21.0<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">files</span><span class="o">.</span><span class="n">pythonhosted</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">packages</span><span class="o">/</span><span class="n">c1</span><span class="o">/</span><span class="n">e8</span><span class="o">/</span><span class="mi">88</span><span class="n">d7afd859a52092e86e0f1d9fa5ed7718c73ee5ef68a71d0123019a197e</span><span class="o">/</span><span class="n">xgboost</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">py3</span><span class="o">-</span><span class="n">none</span><span class="o">-</span><span class="n">manylinux1_x86_64</span><span class="o">.</span><span class="n">whl</span>
+<span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">xgboost</span>
 </pre></div>
 </div>
 </div>
@@ -307,12 +309,17 @@ pip install shap==0.21.0<div class="nbinput docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">ERROR: xgboost-1.0.0-py3-none-manylinux1_x86_64.whl is not a supported wheel on this platform.</span>
+Collecting xgboost
+  Using cached xgboost-1.2.1-py3-none-macosx_10_13_x86_64.macosx_10_14_x86_64.macosx_10_15_x86_64.whl (1.2 MB)
+Requirement already satisfied: scipy in /Users/juseimandi/opt/anaconda3/lib/python3.8/site-packages (from xgboost) (1.5.0)
+Requirement already satisfied: numpy in /Users/juseimandi/opt/anaconda3/lib/python3.8/site-packages (from xgboost) (1.18.5)
+Installing collected packages: xgboost
+Successfully installed xgboost-1.2.1
 Note: you may need to restart the kernel to use updated packages.
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -333,7 +340,7 @@ Note: you may need to restart the kernel to use updated packages.
 <div class="section" id="Load-and-split-data">
 <h2>Load and split data<a class="headerlink" href="#Load-and-split-data" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -352,7 +359,7 @@ Note: you may need to restart the kernel to use updated packages.
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -362,7 +369,7 @@ Note: you may need to restart the kernel to use updated packages.
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -371,7 +378,7 @@ Note: you may need to restart the kernel to use updated packages.
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -404,7 +411,7 @@ Note: you may need to restart the kernel to use updated packages.
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -435,15 +442,15 @@ Note: you may need to restart the kernel to use updated packages.
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Retrieved Training Data
-(5646, 213) ---- (5646, 1)
+(5646, 214) ---- (5646, 1)
 Retrieved Validation Data
-(942, 213) ---- (942, 1)
+(942, 214) ---- (942, 1)
 Retrieved Test Data
-(940, 213) ---- (940, 1)
+(940, 214) ---- (940, 1)
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -458,7 +465,7 @@ Retrieved Test Data
 <div class="section" id="Train-special-XGboost-model">
 <h2>Train special XGboost model<a class="headerlink" href="#Train-special-XGboost-model" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -469,7 +476,7 @@ Retrieved Test Data
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -484,12 +491,12 @@ Retrieved Test Data
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/Users/juseimandi/opt/anaconda3/envs/myenv/lib/python3.7/site-packages/sklearn/utils/validation.py:72: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+/Users/juseimandi/opt/anaconda3/lib/python3.8/site-packages/sklearn/utils/validation.py:73: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
   return f(**kwargs)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -505,7 +512,7 @@ XGBClassifier(base_score=0.5, booster=&#39;gbtree&#39;, colsample_bylevel=1,
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -526,7 +533,7 @@ Accuracy train: 100.00%
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -551,7 +558,7 @@ weighted avg       1.00      1.00      1.00       940
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -569,7 +576,7 @@ weighted avg       1.00      1.00      1.00       940
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/Users/juseimandi/opt/anaconda3/envs/myenv/lib/python3.7/site-packages/sklearn/utils/validation.py:72: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+/Users/juseimandi/opt/anaconda3/lib/python3.8/site-packages/sklearn/utils/validation.py:73: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
   return f(**kwargs)
 </pre></div></div>
 </div>
@@ -578,7 +585,7 @@ weighted avg       1.00      1.00      1.00       940
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[19:38:41] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:516:
+[17:42:26] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:516:
 Parameters: { model__max_depth, model__min_child_weight, model__n_estimators } might not be used.
 
   This may not be accurate due to some parameters are only used in language bindings but
@@ -589,7 +596,7 @@ Parameters: { model__max_depth, model__min_child_weight, model__n_estimators } m
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -617,7 +624,7 @@ GridSearchCV(cv=5,
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -635,7 +642,7 @@ GridSearchCV(cv=5,
 <div class="highlight"><pre>
 {&#39;model__max_depth&#39;: 10, &#39;model__min_child_weight&#39;: 5, &#39;model__n_estimators&#39;: 200}
 1.0
-[19:39:00] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:516:
+[17:43:09] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:516:
 Parameters: { model__max_depth, model__min_child_weight, model__n_estimators } might not be used.
 
   This may not be accurate due to some parameters are only used in language bindings but
@@ -646,7 +653,7 @@ Parameters: { model__max_depth, model__min_child_weight, model__n_estimators } m
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -664,7 +671,7 @@ XGBClassifier(base_score=0.5, booster=&#39;gbtree&#39;, colsample_bylevel=1,
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -673,7 +680,7 @@ XGBClassifier(base_score=0.5, booster=&#39;gbtree&#39;, colsample_bylevel=1,
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -682,7 +689,7 @@ XGBClassifier(base_score=0.5, booster=&#39;gbtree&#39;, colsample_bylevel=1,
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -691,7 +698,7 @@ XGBClassifier(base_score=0.5, booster=&#39;gbtree&#39;, colsample_bylevel=1,
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -719,7 +726,7 @@ weighted avg       1.00      1.00      1.00       940
 <div class="section" id="interpretation-with-SHAP">
 <h2>interpretation with SHAP<a class="headerlink" href="#interpretation-with-SHAP" title="Permalink to this headline">¶</a></h2>
 Need to load JS to vizualise graphe and create the interpretation<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -764,7 +771,7 @@ this._closingComment=p,h}var d=c(this._stringText);return t.renderToStaticMarkup
 i.prototype.destructor=function(){this.func=null,this.context=null,this.count=0},d.addPoolingTo(i,m),u.prototype.destructor=function(){this.result=null,this.keyPrefix=null,this.func=null,this.context=null,this.count=0},d.addPoolingTo(u,_);var x={forEach:a,map:l,mapIntoWithKeyPrefixInternal:s,count:p,toArray:h};t.exports=x},function(t,e,n){"use strict";function r(t){return t}function i(t,e){var n=b.hasOwnProperty(e)?b[e]:null;w.hasOwnProperty(e)&&("OVERRIDE_BASE"!==n?p("73",e):void 0),t&&("DEFINE_MANY"!==n&&"DEFINE_MANY_MERGED"!==n?p("74",e):void 0)}function o(t,e){if(e){"function"==typeof e?p("75"):void 0,v.isValidElement(e)?p("76"):void 0;var n=t.prototype,r=n.__reactAutoBindPairs;e.hasOwnProperty(m)&&x.mixins(t,e.mixins);for(var o in e)if(e.hasOwnProperty(o)&&o!==m){var a=e[o],u=n.hasOwnProperty(o);if(i(u,o),x.hasOwnProperty(o))x[o](t,a);else{var l=b.hasOwnProperty(o),f="function"==typeof a,h=f&&!l&&!u&&e.autobind!==!1;if(h)r.push(o,a),n[o]=a;else if(u){var d=b[o];!l||"DEFINE_MANY_MERGED"!==d&&"DEFINE_MANY"!==d?p("77",d,o):void 0,"DEFINE_MANY_MERGED"===d?n[o]=c(n[o],a):"DEFINE_MANY"===d&&(n[o]=s(n[o],a))}else n[o]=a}}}else;}function a(t,e){if(e)for(var n in e){var r=e[n];if(e.hasOwnProperty(n)){var i=n in x;i?p("78",n):void 0;var o=n in t;o?p("79",n):void 0,t[n]=r}}}function u(t,e){t&&e&&"object"==typeof t&&"object"==typeof e?void 0:p("80");for(var n in e)e.hasOwnProperty(n)&&(void 0!==t[n]?p("81",n):void 0,t[n]=e[n]);return t}function c(t,e){return function(){var n=t.apply(this,arguments),r=e.apply(this,arguments);if(null==n)return r;if(null==r)return n;var i={};return u(i,n),u(i,r),i}}function s(t,e){return function(){t.apply(this,arguments),e.apply(this,arguments)}}function l(t,e){var n=e.bind(t);return n}function f(t){for(var e=t.__reactAutoBindPairs,n=0;n<e.length;n+=2){var r=e[n],i=e[n+1];t[r]=l(t,i)}}var p=n(28),h=n(3),d=n(96),v=n(27),g=(n(175),n(97)),y=n(38),m=(n(0),n(1),"mixins"),_=[],b={mixins:"DEFINE_MANY",statics:"DEFINE_MANY",propTypes:"DEFINE_MANY",contextTypes:"DEFINE_MANY",childContextTypes:"DEFINE_MANY",getDefaultProps:"DEFINE_MANY_MERGED",getInitialState:"DEFINE_MANY_MERGED",getChildContext:"DEFINE_MANY_MERGED",render:"DEFINE_ONCE",componentWillMount:"DEFINE_MANY",componentDidMount:"DEFINE_MANY",componentWillReceiveProps:"DEFINE_MANY",shouldComponentUpdate:"DEFINE_ONCE",componentWillUpdate:"DEFINE_MANY",componentDidUpdate:"DEFINE_MANY",componentWillUnmount:"DEFINE_MANY",updateComponent:"OVERRIDE_BASE"},x={displayName:function(t,e){t.displayName=e},mixins:function(t,e){if(e)for(var n=0;n<e.length;n++)o(t,e[n])},childContextTypes:function(t,e){t.childContextTypes=h({},t.childContextTypes,e)},contextTypes:function(t,e){t.contextTypes=h({},t.contextTypes,e)},getDefaultProps:function(t,e){t.getDefaultProps?t.getDefaultProps=c(t.getDefaultProps,e):t.getDefaultProps=e},propTypes:function(t,e){t.propTypes=h({},t.propTypes,e)},statics:function(t,e){a(t,e)},autobind:function(){}},w={replaceState:function(t,e){this.updater.enqueueReplaceState(this,t),e&&this.updater.enqueueCallback(this,e,"replaceState")},isMounted:function(){return this.updater.isMounted(this)}},C=function(){};h(C.prototype,d.prototype,w);var M={createClass:function(t){var e=r(function(t,n,r){this.__reactAutoBindPairs.length&&f(this),this.props=t,this.context=n,this.refs=y,this.updater=r||g,this.state=null;var i=this.getInitialState?this.getInitialState():null;"object"!=typeof i||Array.isArray(i)?p("82",e.displayName||"ReactCompositeComponent"):void 0,this.state=i});e.prototype=new C,e.prototype.constructor=e,e.prototype.__reactAutoBindPairs=[],_.forEach(o.bind(null,e)),o(e,t),e.getDefaultProps&&(e.defaultProps=e.getDefaultProps()),e.prototype.render?void 0:p("83");for(var n in b)e.prototype[n]||(e.prototype[n]=null);return e},injection:{injectMixin:function(t){_.push(t)}}};t.exports=M},function(t,e,n){"use strict";var r=n(27),i=r.createFactory,o={a:i("a"),abbr:i("abbr"),address:i("address"),area:i("area"),article:i("article"),aside:i("aside"),audio:i("audio"),b:i("b"),base:i("base"),bdi:i("bdi"),bdo:i("bdo"),big:i("big"),blockquote:i("blockquote"),body:i("body"),br:i("br"),button:i("button"),canvas:i("canvas"),caption:i("caption"),cite:i("cite"),code:i("code"),col:i("col"),colgroup:i("colgroup"),data:i("data"),datalist:i("datalist"),dd:i("dd"),del:i("del"),details:i("details"),dfn:i("dfn"),dialog:i("dialog"),div:i("div"),dl:i("dl"),dt:i("dt"),em:i("em"),embed:i("embed"),fieldset:i("fieldset"),figcaption:i("figcaption"),figure:i("figure"),footer:i("footer"),form:i("form"),h1:i("h1"),h2:i("h2"),h3:i("h3"),h4:i("h4"),h5:i("h5"),h6:i("h6"),head:i("head"),header:i("header"),hgroup:i("hgroup"),hr:i("hr"),html:i("html"),i:i("i"),iframe:i("iframe"),img:i("img"),input:i("input"),ins:i("ins"),kbd:i("kbd"),keygen:i("keygen"),label:i("label"),legend:i("legend"),li:i("li"),link:i("link"),main:i("main"),map:i("map"),mark:i("mark"),menu:i("menu"),menuitem:i("menuitem"),meta:i("meta"),meter:i("meter"),nav:i("nav"),noscript:i("noscript"),object:i("object"),ol:i("ol"),optgroup:i("optgroup"),option:i("option"),output:i("output"),p:i("p"),param:i("param"),picture:i("picture"),pre:i("pre"),progress:i("progress"),q:i("q"),rp:i("rp"),rt:i("rt"),ruby:i("ruby"),s:i("s"),samp:i("samp"),script:i("script"),section:i("section"),select:i("select"),small:i("small"),source:i("source"),span:i("span"),strong:i("strong"),style:i("style"),sub:i("sub"),summary:i("summary"),sup:i("sup"),table:i("table"),tbody:i("tbody"),td:i("td"),textarea:i("textarea"),tfoot:i("tfoot"),th:i("th"),thead:i("thead"),time:i("time"),title:i("title"),tr:i("tr"),track:i("track"),u:i("u"),ul:i("ul"),var:i("var"),video:i("video"),wbr:i("wbr"),circle:i("circle"),clipPath:i("clipPath"),defs:i("defs"),ellipse:i("ellipse"),g:i("g"),image:i("image"),line:i("line"),linearGradient:i("linearGradient"),mask:i("mask"),path:i("path"),pattern:i("pattern"),polygon:i("polygon"),polyline:i("polyline"),radialGradient:i("radialGradient"),rect:i("rect"),stop:i("stop"),svg:i("svg"),text:i("text"),tspan:i("tspan")};t.exports=o},function(t,e,n){"use strict";function r(t,e){return t===e?0!==t||1/t===1/e:t!==t&&e!==e}function i(t){this.message=t,this.stack=""}function o(t){function e(e,n,r,o,a,u,c){o=o||E,u=u||r;if(null==n[r]){var s=w[a];return e?new i(null===n[r]?"The "+s+" `"+u+"` is marked as required "+("in `"+o+"`, but its value is `null`."):"The "+s+" `"+u+"` is marked as required in "+("`"+o+"`, but its value is `undefined`.")):null}return t(n,r,o,a,u)}var n=e.bind(null,!1);return n.isRequired=e.bind(null,!0),n}function a(t){function e(e,n,r,o,a,u){var c=e[n],s=m(c);if(s!==t){var l=w[o],f=_(c);return new i("Invalid "+l+" `"+a+"` of type "+("`"+f+"` supplied to `"+r+"`, expected ")+("`"+t+"`."))}return null}return o(e)}function u(){return o(M.thatReturns(null))}function c(t){function e(e,n,r,o,a){if("function"!=typeof t)return new i("Property `"+a+"` of component `"+r+"` has invalid PropType notation inside arrayOf.");var u=e[n];if(!Array.isArray(u)){var c=w[o],s=m(u);return new i("Invalid "+c+" `"+a+"` of type "+("`"+s+"` supplied to `"+r+"`, expected an array."))}for(var l=0;l<u.length;l++){var f=t(u,l,r,o,a+"["+l+"]",C);if(f instanceof Error)return f}return null}return o(e)}function s(){function t(t,e,n,r,o){var a=t[e];if(!x.isValidElement(a)){var u=w[r],c=m(a);return new i("Invalid "+u+" `"+o+"` of type "+("`"+c+"` supplied to `"+n+"`, expected a single ReactElement."))}return null}return o(t)}function l(t){function e(e,n,r,o,a){if(!(e[n]instanceof t)){var u=w[o],c=t.name||E,s=b(e[n]);return new i("Invalid "+u+" `"+a+"` of type "+("`"+s+"` supplied to `"+r+"`, expected ")+("instance of `"+c+"`."))}return null}return o(e)}function f(t){function e(e,n,o,a,u){for(var c=e[n],s=0;s<t.length;s++)if(r(c,t[s]))return null;var l=w[a],f=JSON.stringify(t);return new i("Invalid "+l+" `"+u+"` of value `"+c+"` "+("supplied to `"+o+"`, expected one of "+f+"."))}return Array.isArray(t)?o(e):M.thatReturnsNull}function p(t){function e(e,n,r,o,a){if("function"!=typeof t)return new i("Property `"+a+"` of component `"+r+"` has invalid PropType notation inside objectOf.");var u=e[n],c=m(u);if("object"!==c){var s=w[o];return new i("Invalid "+s+" `"+a+"` of type "+("`"+c+"` supplied to `"+r+"`, expected an object."))}for(var l in u)if(u.hasOwnProperty(l)){var f=t(u,l,r,o,a+"."+l,C);if(f instanceof Error)return f}return null}return o(e)}function h(t){function e(e,n,r,o,a){for(var u=0;u<t.length;u++){var c=t[u];if(null==c(e,n,r,o,a,C))return null}var s=w[o];return new i("Invalid "+s+" `"+a+"` supplied to "+("`"+r+"`."))}return Array.isArray(t)?o(e):M.thatReturnsNull}function d(){function t(t,e,n,r,o){if(!g(t[e])){var a=w[r];return new i("Invalid "+a+" `"+o+"` supplied to "+("`"+n+"`, expected a ReactNode."))}return null}return o(t)}function v(t){function e(e,n,r,o,a){var u=e[n],c=m(u);if("object"!==c){var s=w[o];return new i("Invalid "+s+" `"+a+"` of type `"+c+"` "+("supplied to `"+r+"`, expected `object`."))}for(var l in t){var f=t[l];if(f){var p=f(u,l,r,o,a+"."+l,C);if(p)return p}}return null}return o(e)}function g(t){switch(typeof t){case"number":case"string":case"undefined":return!0;case"boolean":return!t;case"object":if(Array.isArray(t))return t.every(g);if(null===t||x.isValidElement(t))return!0;var e=k(t);if(!e)return!1;var n,r=e.call(t);if(e!==t.entries){for(;!(n=r.next()).done;)if(!g(n.value))return!1}else for(;!(n=r.next()).done;){var i=n.value;if(i&&!g(i[1]))return!1}return!0;default:return!1}}function y(t,e){return"symbol"===t||("Symbol"===e["@@toStringTag"]||"function"==typeof Symbol&&e instanceof Symbol)}function m(t){var e=typeof t;return Array.isArray(t)?"array":t instanceof RegExp?"object":y(e,t)?"symbol":e}function _(t){var e=m(t);if("object"===e){if(t instanceof Date)return"date";if(t instanceof RegExp)return"regexp"}return e}function b(t){return t.constructor&&t.constructor.name?t.constructor.name:E}var x=n(27),w=n(175),C=n(405),M=n(9),k=n(177),E=(n(1),"<<anonymous>>"),T={array:a("array"),bool:a("boolean"),func:a("function"),number:a("number"),object:a("object"),string:a("string"),symbol:a("symbol"),any:u(),arrayOf:c,element:s(),instanceOf:l,node:d(),objectOf:p,oneOf:f,oneOfType:h,shape:v};i.prototype=Error.prototype,t.exports=T},function(t,e,n){"use strict";var r="SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";t.exports=r},function(t,e,n){"use strict";function r(t,e,n){this.props=t,this.context=e,this.refs=c,this.updater=n||u}function i(){}var o=n(3),a=n(96),u=n(97),c=n(38);i.prototype=a.prototype,r.prototype=new i,r.prototype.constructor=r,o(r.prototype,a.prototype),r.prototype.isPureReactComponent=!0,t.exports=r},function(t,e,n){"use strict";t.exports="15.4.2"},function(t,e,n){"use strict";function r(t){return o.isValidElement(t)?void 0:i("143"),t}var i=n(28),o=n(27);n(0);t.exports=r},function(t,e,n){"use strict";function r(t,e){return t&&"object"==typeof t&&null!=t.key?s.escape(t.key):e.toString(36)}function i(t,e,n,o){var p=typeof t;if("undefined"!==p&&"boolean"!==p||(t=null),null===t||"string"===p||"number"===p||"object"===p&&t.$$typeof===u)return n(o,t,""===e?l+r(t,0):e),1;var h,d,v=0,g=""===e?l:e+f;if(Array.isArray(t))for(var y=0;y<t.length;y++)h=t[y],d=g+r(h,y),v+=i(h,d,n,o);else{var m=c(t);if(m){var _,b=m.call(t);if(m!==t.entries)for(var x=0;!(_=b.next()).done;)h=_.value,d=g+r(h,x++),v+=i(h,d,n,o);else for(;!(_=b.next()).done;){var w=_.value;w&&(h=w[1],d=g+s.escape(w[0])+f+r(h,0),v+=i(h,d,n,o))}}else if("object"===p){var C="",M=String(t);a("31","[object Object]"===M?"object with keys {"+Object.keys(t).join(", ")+"}":M,C)}}return v}function o(t,e,n){return null==t?0:i(t,"",e,n)}var a=n(28),u=(n(15),n(174)),c=n(177),s=(n(0),n(399)),l=(n(1),"."),f=":";t.exports=o},function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}var i=n(41),o=r(i),a=n(182),u=r(a),c=n(183),s=r(c),l=n(181),f=r(l),p=n(180),h=r(p),d=n(179),v=r(d);(0,s.default)(),window.IML={SimpleListVisualizer:f.default,AdditiveForceVisualizer:h.default,AdditiveForceArrayVisualizer:v.default,React:o.default,ReactDom:u.default}}]);</script></div>
 </div>
 firts we create a TreeExplainer optimised for tree based modelsThen in order to compute the shapley values with the tree explainer, we need to call the shap_values methods passing a dataset<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -775,7 +782,7 @@ firts we create a TreeExplainer optimised for tree based modelsThen in order to 
 </div>
 </div>
 Visualising our explanations using the force_plot function for a prediction from a special id<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -785,11 +792,11 @@ Visualising our explanations using the force_plot function for a prediction from
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
-<div id='iUEM1WSH7I360R8UZ6APW'>
+<div id='iYY05ASRQ474FSZDYNXFN'>
 <div style='color: #900; text-align: center;'>
   <b>Visualization omitted, Javascript library not loaded!</b><br>
   Have you run `initjs()` in this notebook? If this notebook was from another
@@ -798,8 +805,8 @@ Visualising our explanations using the force_plot function for a prediction from
 </div></div>
  <script>
    if (window.IML) IML.ReactDom.render(
-    IML.React.createElement(IML.AdditiveForceVisualizer, {"outNames": ["output value"], "baseValue": 0.00010331211524317041, "outValue": -7.953067302703857, "link": "identity", "featureNames": ["SK_ID_CURR", "TARGET", "CNT_CHILDREN", "AMT_INCOME_TOTAL", "AMT_CREDIT", "AMT_ANNUITY", "AMT_GOODS_PRICE", "REGION_POPULATION_RELATIVE", "DAYS_BIRTH", "DAYS_EMPLOYED", "DAYS_REGISTRATION", "DAYS_ID_PUBLISH", "FLAG_MOBIL", "FLAG_EMP_PHONE", "FLAG_WORK_PHONE", "FLAG_CONT_MOBILE", "FLAG_PHONE", "FLAG_EMAIL", "CNT_FAM_MEMBERS", "REGION_RATING_CLIENT", "REGION_RATING_CLIENT_W_CITY", "HOUR_APPR_PROCESS_START", "REG_REGION_NOT_LIVE_REGION", "REG_REGION_NOT_WORK_REGION", "LIVE_REGION_NOT_WORK_REGION", "REG_CITY_NOT_LIVE_CITY", "REG_CITY_NOT_WORK_CITY", "LIVE_CITY_NOT_WORK_CITY", "EXT_SOURCE_2", "EXT_SOURCE_3", "APARTMENTS_AVG", "YEARS_BEGINEXPLUATATION_AVG", "ELEVATORS_AVG", "ENTRANCES_AVG", "FLOORSMAX_AVG", "LIVINGAREA_AVG", "NONLIVINGAREA_AVG", "APARTMENTS_MODE", "YEARS_BEGINEXPLUATATION_MODE", "ELEVATORS_MODE", "ENTRANCES_MODE", "FLOORSMAX_MODE", "LIVINGAREA_MODE", "NONLIVINGAREA_MODE", "APARTMENTS_MEDI", "YEARS_BEGINEXPLUATATION_MEDI", "ELEVATORS_MEDI", "ENTRANCES_MEDI", "FLOORSMAX_MEDI", "LIVINGAREA_MEDI", "NONLIVINGAREA_MEDI", "TOTALAREA_MODE", "OBS_30_CNT_SOCIAL_CIRCLE", "DEF_30_CNT_SOCIAL_CIRCLE", "OBS_60_CNT_SOCIAL_CIRCLE", "DEF_60_CNT_SOCIAL_CIRCLE", "DAYS_LAST_PHONE_CHANGE", "FLAG_DOCUMENT_2", "FLAG_DOCUMENT_3", "FLAG_DOCUMENT_4", "FLAG_DOCUMENT_5", "FLAG_DOCUMENT_6", "FLAG_DOCUMENT_7", "FLAG_DOCUMENT_8", "FLAG_DOCUMENT_9", "FLAG_DOCUMENT_10", "FLAG_DOCUMENT_11", "FLAG_DOCUMENT_12", "FLAG_DOCUMENT_13", "FLAG_DOCUMENT_14", "FLAG_DOCUMENT_15", "FLAG_DOCUMENT_16", "FLAG_DOCUMENT_17", "FLAG_DOCUMENT_18", "FLAG_DOCUMENT_19", "FLAG_DOCUMENT_20", "FLAG_DOCUMENT_21", "AMT_REQ_CREDIT_BUREAU_HOUR", "AMT_REQ_CREDIT_BUREAU_DAY", "AMT_REQ_CREDIT_BUREAU_WEEK", "AMT_REQ_CREDIT_BUREAU_MON", "AMT_REQ_CREDIT_BUREAU_QRT", "AMT_REQ_CREDIT_BUREAU_YEAR", "NAME_CONTRACT_TYPE_Cash loans", "NAME_CONTRACT_TYPE_Revolving loans", "CODE_GENDER_F", "CODE_GENDER_M", "FLAG_OWN_CAR_N", "FLAG_OWN_CAR_Y", "FLAG_OWN_REALTY_N", "FLAG_OWN_REALTY_Y", "NAME_TYPE_SUITE_Children", "NAME_TYPE_SUITE_Family", "NAME_TYPE_SUITE_Group of people", "NAME_TYPE_SUITE_Other_A", "NAME_TYPE_SUITE_Other_B", "NAME_TYPE_SUITE_Spouse, partner", "NAME_TYPE_SUITE_Unaccompanied", "NAME_INCOME_TYPE_Commercial associate", "NAME_INCOME_TYPE_State servant", "NAME_INCOME_TYPE_Working", "NAME_EDUCATION_TYPE_Academic degree", "NAME_EDUCATION_TYPE_Higher education", "NAME_EDUCATION_TYPE_Incomplete higher", "NAME_EDUCATION_TYPE_Lower secondary", "NAME_EDUCATION_TYPE_Secondary / secondary special", "NAME_FAMILY_STATUS_Civil marriage", "NAME_FAMILY_STATUS_Married", "NAME_FAMILY_STATUS_Separated", "NAME_FAMILY_STATUS_Single / not married", "NAME_FAMILY_STATUS_Widow", "NAME_HOUSING_TYPE_Co-op apartment", "NAME_HOUSING_TYPE_House / apartment", "NAME_HOUSING_TYPE_Municipal apartment", "NAME_HOUSING_TYPE_Office apartment", "NAME_HOUSING_TYPE_Rented apartment", "NAME_HOUSING_TYPE_With parents", "OCCUPATION_TYPE_Accountants", "OCCUPATION_TYPE_Cleaning staff", "OCCUPATION_TYPE_Cooking staff", "OCCUPATION_TYPE_Core staff", "OCCUPATION_TYPE_Drivers", "OCCUPATION_TYPE_HR staff", "OCCUPATION_TYPE_High skill tech staff", "OCCUPATION_TYPE_IT staff", "OCCUPATION_TYPE_Laborers", "OCCUPATION_TYPE_Low-skill Laborers", "OCCUPATION_TYPE_Managers", "OCCUPATION_TYPE_Medicine staff", "OCCUPATION_TYPE_Private service staff", "OCCUPATION_TYPE_Realty agents", "OCCUPATION_TYPE_Sales staff", "OCCUPATION_TYPE_Secretaries", "OCCUPATION_TYPE_Security staff", "OCCUPATION_TYPE_Waiters/barmen staff", "WEEKDAY_APPR_PROCESS_START_FRIDAY", "WEEKDAY_APPR_PROCESS_START_MONDAY", "WEEKDAY_APPR_PROCESS_START_SATURDAY", "WEEKDAY_APPR_PROCESS_START_SUNDAY", "WEEKDAY_APPR_PROCESS_START_THURSDAY", "WEEKDAY_APPR_PROCESS_START_TUESDAY", "WEEKDAY_APPR_PROCESS_START_WEDNESDAY", "ORGANIZATION_TYPE_Advertising", "ORGANIZATION_TYPE_Agriculture", "ORGANIZATION_TYPE_Bank", "ORGANIZATION_TYPE_Business Entity Type 1", "ORGANIZATION_TYPE_Business Entity Type 2", "ORGANIZATION_TYPE_Business Entity Type 3", "ORGANIZATION_TYPE_Cleaning", "ORGANIZATION_TYPE_Construction", "ORGANIZATION_TYPE_Culture", "ORGANIZATION_TYPE_Electricity", "ORGANIZATION_TYPE_Emergency", "ORGANIZATION_TYPE_Government", "ORGANIZATION_TYPE_Hotel", "ORGANIZATION_TYPE_Housing", "ORGANIZATION_TYPE_Industry: type 1", "ORGANIZATION_TYPE_Industry: type 10", "ORGANIZATION_TYPE_Industry: type 11", "ORGANIZATION_TYPE_Industry: type 12", "ORGANIZATION_TYPE_Industry: type 13", "ORGANIZATION_TYPE_Industry: type 2", "ORGANIZATION_TYPE_Industry: type 3", "ORGANIZATION_TYPE_Industry: type 4", "ORGANIZATION_TYPE_Industry: type 5", "ORGANIZATION_TYPE_Industry: type 6", "ORGANIZATION_TYPE_Industry: type 7", "ORGANIZATION_TYPE_Industry: type 9", "ORGANIZATION_TYPE_Insurance", "ORGANIZATION_TYPE_Kindergarten", "ORGANIZATION_TYPE_Legal Services", "ORGANIZATION_TYPE_Medicine", "ORGANIZATION_TYPE_Military", "ORGANIZATION_TYPE_Mobile", "ORGANIZATION_TYPE_Other", "ORGANIZATION_TYPE_Police", "ORGANIZATION_TYPE_Postal", "ORGANIZATION_TYPE_Realtor", "ORGANIZATION_TYPE_Religion", "ORGANIZATION_TYPE_Restaurant", "ORGANIZATION_TYPE_School", "ORGANIZATION_TYPE_Security", "ORGANIZATION_TYPE_Security Ministries", "ORGANIZATION_TYPE_Self-employed", "ORGANIZATION_TYPE_Services", "ORGANIZATION_TYPE_Telecom", "ORGANIZATION_TYPE_Trade: type 1", "ORGANIZATION_TYPE_Trade: type 2", "ORGANIZATION_TYPE_Trade: type 3", "ORGANIZATION_TYPE_Trade: type 5", "ORGANIZATION_TYPE_Trade: type 6", "ORGANIZATION_TYPE_Trade: type 7", "ORGANIZATION_TYPE_Transport: type 1", "ORGANIZATION_TYPE_Transport: type 2", "ORGANIZATION_TYPE_Transport: type 3", "ORGANIZATION_TYPE_Transport: type 4", "ORGANIZATION_TYPE_University", "FONDKAPREMONT_MODE_not specified", "FONDKAPREMONT_MODE_org spec account", "FONDKAPREMONT_MODE_reg oper account", "FONDKAPREMONT_MODE_reg oper spec account", "HOUSETYPE_MODE_block of flats", "HOUSETYPE_MODE_specific housing", "HOUSETYPE_MODE_terraced house", "WALLSMATERIAL_MODE_Block", "WALLSMATERIAL_MODE_Mixed", "WALLSMATERIAL_MODE_Monolithic", "WALLSMATERIAL_MODE_Others", "WALLSMATERIAL_MODE_Panel", "WALLSMATERIAL_MODE_Stone, brick", "WALLSMATERIAL_MODE_Wooden", "EMERGENCYSTATE_MODE_No", "EMERGENCYSTATE_MODE_Yes"], "features": {"1": {"effect": -7.9531707763671875, "value": 0.0}}, "plot_cmap": "RdBu", "labelMargin": 20}),
-    document.getElementById('iUEM1WSH7I360R8UZ6APW')
+    IML.React.createElement(IML.AdditiveForceVisualizer, {"outNames": ["output value"], "baseValue": 0.00010331211524317041, "outValue": -7.953067302703857, "link": "identity", "featureNames": ["SK_ID_CURR", "TARGET", "CNT_CHILDREN", "AMT_INCOME_TOTAL", "AMT_CREDIT", "AMT_ANNUITY", "AMT_GOODS_PRICE", "REGION_POPULATION_RELATIVE", "DAYS_BIRTH", "DAYS_EMPLOYED", "DAYS_REGISTRATION", "DAYS_ID_PUBLISH", "FLAG_MOBIL", "FLAG_EMP_PHONE", "FLAG_WORK_PHONE", "FLAG_CONT_MOBILE", "FLAG_PHONE", "FLAG_EMAIL", "CNT_FAM_MEMBERS", "REGION_RATING_CLIENT", "REGION_RATING_CLIENT_W_CITY", "HOUR_APPR_PROCESS_START", "REG_REGION_NOT_LIVE_REGION", "REG_REGION_NOT_WORK_REGION", "LIVE_REGION_NOT_WORK_REGION", "REG_CITY_NOT_LIVE_CITY", "REG_CITY_NOT_WORK_CITY", "LIVE_CITY_NOT_WORK_CITY", "EXT_SOURCE_2", "EXT_SOURCE_3", "APARTMENTS_AVG", "YEARS_BEGINEXPLUATATION_AVG", "ELEVATORS_AVG", "ENTRANCES_AVG", "FLOORSMAX_AVG", "LIVINGAREA_AVG", "NONLIVINGAREA_AVG", "APARTMENTS_MODE", "YEARS_BEGINEXPLUATATION_MODE", "ELEVATORS_MODE", "ENTRANCES_MODE", "FLOORSMAX_MODE", "LIVINGAREA_MODE", "NONLIVINGAREA_MODE", "APARTMENTS_MEDI", "YEARS_BEGINEXPLUATATION_MEDI", "ELEVATORS_MEDI", "ENTRANCES_MEDI", "FLOORSMAX_MEDI", "LIVINGAREA_MEDI", "NONLIVINGAREA_MEDI", "TOTALAREA_MODE", "OBS_30_CNT_SOCIAL_CIRCLE", "DEF_30_CNT_SOCIAL_CIRCLE", "OBS_60_CNT_SOCIAL_CIRCLE", "DEF_60_CNT_SOCIAL_CIRCLE", "DAYS_LAST_PHONE_CHANGE", "FLAG_DOCUMENT_2", "FLAG_DOCUMENT_3", "FLAG_DOCUMENT_4", "FLAG_DOCUMENT_5", "FLAG_DOCUMENT_6", "FLAG_DOCUMENT_7", "FLAG_DOCUMENT_8", "FLAG_DOCUMENT_9", "FLAG_DOCUMENT_10", "FLAG_DOCUMENT_11", "FLAG_DOCUMENT_12", "FLAG_DOCUMENT_13", "FLAG_DOCUMENT_14", "FLAG_DOCUMENT_15", "FLAG_DOCUMENT_16", "FLAG_DOCUMENT_17", "FLAG_DOCUMENT_18", "FLAG_DOCUMENT_19", "FLAG_DOCUMENT_20", "FLAG_DOCUMENT_21", "AMT_REQ_CREDIT_BUREAU_HOUR", "AMT_REQ_CREDIT_BUREAU_DAY", "AMT_REQ_CREDIT_BUREAU_WEEK", "AMT_REQ_CREDIT_BUREAU_MON", "AMT_REQ_CREDIT_BUREAU_QRT", "AMT_REQ_CREDIT_BUREAU_YEAR", "NAME_CONTRACT_TYPE_Cash loans", "NAME_CONTRACT_TYPE_Revolving loans", "CODE_GENDER_F", "CODE_GENDER_M", "FLAG_OWN_CAR_N", "FLAG_OWN_CAR_Y", "FLAG_OWN_REALTY_N", "FLAG_OWN_REALTY_Y", "NAME_TYPE_SUITE_Children", "NAME_TYPE_SUITE_Family", "NAME_TYPE_SUITE_Group of people", "NAME_TYPE_SUITE_Other_A", "NAME_TYPE_SUITE_Other_B", "NAME_TYPE_SUITE_Spouse, partner", "NAME_TYPE_SUITE_Unaccompanied", "NAME_INCOME_TYPE_Businessman", "NAME_INCOME_TYPE_Commercial associate", "NAME_INCOME_TYPE_State servant", "NAME_INCOME_TYPE_Working", "NAME_EDUCATION_TYPE_Academic degree", "NAME_EDUCATION_TYPE_Higher education", "NAME_EDUCATION_TYPE_Incomplete higher", "NAME_EDUCATION_TYPE_Lower secondary", "NAME_EDUCATION_TYPE_Secondary / secondary special", "NAME_FAMILY_STATUS_Civil marriage", "NAME_FAMILY_STATUS_Married", "NAME_FAMILY_STATUS_Separated", "NAME_FAMILY_STATUS_Single / not married", "NAME_FAMILY_STATUS_Widow", "NAME_HOUSING_TYPE_Co-op apartment", "NAME_HOUSING_TYPE_House / apartment", "NAME_HOUSING_TYPE_Municipal apartment", "NAME_HOUSING_TYPE_Office apartment", "NAME_HOUSING_TYPE_Rented apartment", "NAME_HOUSING_TYPE_With parents", "OCCUPATION_TYPE_Accountants", "OCCUPATION_TYPE_Cleaning staff", "OCCUPATION_TYPE_Cooking staff", "OCCUPATION_TYPE_Core staff", "OCCUPATION_TYPE_Drivers", "OCCUPATION_TYPE_HR staff", "OCCUPATION_TYPE_High skill tech staff", "OCCUPATION_TYPE_IT staff", "OCCUPATION_TYPE_Laborers", "OCCUPATION_TYPE_Low-skill Laborers", "OCCUPATION_TYPE_Managers", "OCCUPATION_TYPE_Medicine staff", "OCCUPATION_TYPE_Private service staff", "OCCUPATION_TYPE_Realty agents", "OCCUPATION_TYPE_Sales staff", "OCCUPATION_TYPE_Secretaries", "OCCUPATION_TYPE_Security staff", "OCCUPATION_TYPE_Waiters/barmen staff", "WEEKDAY_APPR_PROCESS_START_FRIDAY", "WEEKDAY_APPR_PROCESS_START_MONDAY", "WEEKDAY_APPR_PROCESS_START_SATURDAY", "WEEKDAY_APPR_PROCESS_START_SUNDAY", "WEEKDAY_APPR_PROCESS_START_THURSDAY", "WEEKDAY_APPR_PROCESS_START_TUESDAY", "WEEKDAY_APPR_PROCESS_START_WEDNESDAY", "ORGANIZATION_TYPE_Advertising", "ORGANIZATION_TYPE_Agriculture", "ORGANIZATION_TYPE_Bank", "ORGANIZATION_TYPE_Business Entity Type 1", "ORGANIZATION_TYPE_Business Entity Type 2", "ORGANIZATION_TYPE_Business Entity Type 3", "ORGANIZATION_TYPE_Cleaning", "ORGANIZATION_TYPE_Construction", "ORGANIZATION_TYPE_Culture", "ORGANIZATION_TYPE_Electricity", "ORGANIZATION_TYPE_Emergency", "ORGANIZATION_TYPE_Government", "ORGANIZATION_TYPE_Hotel", "ORGANIZATION_TYPE_Housing", "ORGANIZATION_TYPE_Industry: type 1", "ORGANIZATION_TYPE_Industry: type 10", "ORGANIZATION_TYPE_Industry: type 11", "ORGANIZATION_TYPE_Industry: type 12", "ORGANIZATION_TYPE_Industry: type 2", "ORGANIZATION_TYPE_Industry: type 3", "ORGANIZATION_TYPE_Industry: type 4", "ORGANIZATION_TYPE_Industry: type 5", "ORGANIZATION_TYPE_Industry: type 6", "ORGANIZATION_TYPE_Industry: type 7", "ORGANIZATION_TYPE_Industry: type 9", "ORGANIZATION_TYPE_Insurance", "ORGANIZATION_TYPE_Kindergarten", "ORGANIZATION_TYPE_Legal Services", "ORGANIZATION_TYPE_Medicine", "ORGANIZATION_TYPE_Military", "ORGANIZATION_TYPE_Mobile", "ORGANIZATION_TYPE_Other", "ORGANIZATION_TYPE_Police", "ORGANIZATION_TYPE_Postal", "ORGANIZATION_TYPE_Realtor", "ORGANIZATION_TYPE_Religion", "ORGANIZATION_TYPE_Restaurant", "ORGANIZATION_TYPE_School", "ORGANIZATION_TYPE_Security", "ORGANIZATION_TYPE_Security Ministries", "ORGANIZATION_TYPE_Self-employed", "ORGANIZATION_TYPE_Services", "ORGANIZATION_TYPE_Telecom", "ORGANIZATION_TYPE_Trade: type 1", "ORGANIZATION_TYPE_Trade: type 2", "ORGANIZATION_TYPE_Trade: type 3", "ORGANIZATION_TYPE_Trade: type 4", "ORGANIZATION_TYPE_Trade: type 5", "ORGANIZATION_TYPE_Trade: type 6", "ORGANIZATION_TYPE_Trade: type 7", "ORGANIZATION_TYPE_Transport: type 1", "ORGANIZATION_TYPE_Transport: type 2", "ORGANIZATION_TYPE_Transport: type 3", "ORGANIZATION_TYPE_Transport: type 4", "ORGANIZATION_TYPE_University", "FONDKAPREMONT_MODE_not specified", "FONDKAPREMONT_MODE_org spec account", "FONDKAPREMONT_MODE_reg oper account", "FONDKAPREMONT_MODE_reg oper spec account", "HOUSETYPE_MODE_block of flats", "HOUSETYPE_MODE_specific housing", "HOUSETYPE_MODE_terraced house", "WALLSMATERIAL_MODE_Block", "WALLSMATERIAL_MODE_Mixed", "WALLSMATERIAL_MODE_Monolithic", "WALLSMATERIAL_MODE_Others", "WALLSMATERIAL_MODE_Panel", "WALLSMATERIAL_MODE_Stone, brick", "WALLSMATERIAL_MODE_Wooden", "EMERGENCYSTATE_MODE_No", "EMERGENCYSTATE_MODE_Yes"], "features": {"1": {"effect": -7.9531707763671875, "value": 0.0}}, "plot_cmap": "RdBu", "labelMargin": 20}),
+    document.getElementById('iYY05ASRQ474FSZDYNXFN')
   );
 </script></div>
 </div>
@@ -814,7 +821,7 @@ visualise all points in our dataset at once with a given class by passing all ex
 </div>
 </div>
 we also create the summary_plot, it's a feature importance plot to understand meaningful insights.<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -830,7 +837,7 @@ we also create the summary_plot, it's a feature importance plot to understand me
 </div>
 </div>
 we can build a dependence plot for special feature and see how it<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -851,7 +858,7 @@ we can build a dependence plot for special feature and see how it<div class="nbi
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<span></span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">shap</span><span class="o">.</span><span class="n">readthedocs</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">en</span><span class="o">/</span><span class="n">latest</span><span class="o">/</span><span class="n">example_notebooks</span><span class="o">/</span><span class="n">tree_explainer</span><span class="o">/</span><span class="n">Basic</span><span class="o">%</span><span class="k">20SHAP</span>%20Interaction%20Value%20Example%20in%20XGBoost.html
 </pre></div>
 </div>
 </div>
@@ -865,7 +872,7 @@ we can build a dependence plot for special feature and see how it<div class="nbi
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">Machine learning Finance use case</a></h1>
+<h1 class="logo"><a href="index.html">Project 1 of application of big data</a></h1>
 
 
 
@@ -876,16 +883,25 @@ we can build a dependence plot for special feature and see how it<div class="nbi
 
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="Feature%20engineering.html">Feature engineering</a></li>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Import%20data%20and%20data%20cleaning.html">Import data and data cleaning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Feature%20engineering.html">Feature engineering</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Model%20building%20For%20balanced%20dataset.html">Model building For balanced dataset</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">XAI with SHAP method</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Install-package">Install package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Load-and-split-data">Load and split data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Train-special-XGboost-model">Train special XGboost model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interpretation-with-SHAP">interpretation with SHAP</a></li>
+</ul>
+</li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Model%20building%20For%20balanced%20dataset.html" title="previous chapter">Model building For balanced dataset</a></li>
+      <li>Next: <a href="Xgboost.html" title="next chapter">&lt;no title&gt;</a></li>
   </ul></li>
 </ul>
 </div>
@@ -912,7 +928,7 @@ we can build a dependence plot for special feature and see how it<div class="nbi
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2020, Seimandi Juliette and Gilles Robin.
+      &copy;2020, Robin gilles and Seimandi juliette.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>

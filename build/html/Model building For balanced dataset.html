@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Model building For balanced dataset &#8212; Machine learning Finance use case 28/10/2020 documentation</title>
+    <title>Model building For balanced dataset &#8212; Project 1 of application of big data 3/11/2020 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -16,7 +16,8 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Import data and data cleaning" href="Import%20data%20and%20data%20cleaning.html" />
+    <link rel="next" title="XAI with SHAP method" href="XAI%20with%20SHAP%20method.html" />
+    <link rel="prev" title="Feature engineering" href="Feature%20engineering.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -286,7 +287,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Prepared-dataset">
 <h2>Prepared dataset<a class="headerlink" href="#Prepared-dataset" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -313,7 +314,7 @@ Load dataset<div class="nbinput nblast docutils container">
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df_train_balanced</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;df_balanced.csv&#39;</span><span class="p">)</span>
+<span></span><span class="n">df_balanced</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;df_balanced.csv&#39;</span><span class="p">)</span>
 <span class="n">df_test</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;df_clean_test.csv&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -328,341 +329,16 @@ Load dataset<div class="nbinput nblast docutils container">
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df_test</span>
+<span></span><span class="n">df_balanced</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>SK_ID_CURR</th>
-      <th>CNT_CHILDREN</th>
-      <th>AMT_INCOME_TOTAL</th>
-      <th>AMT_CREDIT</th>
-      <th>AMT_ANNUITY</th>
-      <th>AMT_GOODS_PRICE</th>
-      <th>REGION_POPULATION_RELATIVE</th>
-      <th>DAYS_BIRTH</th>
-      <th>DAYS_EMPLOYED</th>
-      <th>DAYS_REGISTRATION</th>
-      <th>...</th>
-      <th>HOUSETYPE_MODE_terraced house</th>
-      <th>WALLSMATERIAL_MODE_Block</th>
-      <th>WALLSMATERIAL_MODE_Mixed</th>
-      <th>WALLSMATERIAL_MODE_Monolithic</th>
-      <th>WALLSMATERIAL_MODE_Others</th>
-      <th>WALLSMATERIAL_MODE_Panel</th>
-      <th>WALLSMATERIAL_MODE_Stone, brick</th>
-      <th>WALLSMATERIAL_MODE_Wooden</th>
-      <th>EMERGENCYSTATE_MODE_No</th>
-      <th>EMERGENCYSTATE_MODE_Yes</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>-5.199338</td>
-      <td>1.579968</td>
-      <td>1.186981</td>
-      <td>1.811457</td>
-      <td>1.023003</td>
-      <td>1.873053</td>
-      <td>0.509202</td>
-      <td>0.209327</td>
-      <td>0.029800</td>
-      <td>0.584551</td>
-      <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>-3.952911</td>
-      <td>-5.199338</td>
-      <td>0.901416</td>
-      <td>1.080589</td>
-      <td>0.384455</td>
-      <td>0.951518</td>
-      <td>0.432104</td>
-      <td>-0.930962</td>
-      <td>-2.413129</td>
-      <td>-0.373473</td>
-      <td>...</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>-3.517482</td>
-      <td>-5.199338</td>
-      <td>0.015055</td>
-      <td>-0.556927</td>
-      <td>-0.517790</td>
-      <td>-0.842694</td>
-      <td>0.979511</td>
-      <td>0.320742</td>
-      <td>0.598915</td>
-      <td>-0.296683</td>
-      <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>-3.454423</td>
-      <td>0.746351</td>
-      <td>0.533636</td>
-      <td>-0.188033</td>
-      <td>-0.341493</td>
-      <td>-0.211070</td>
-      <td>0.432104</td>
-      <td>1.060909</td>
-      <td>0.020689</td>
-      <td>2.104112</td>
-      <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>-3.400432</td>
-      <td>-5.199338</td>
-      <td>-1.346386</td>
-      <td>-0.999986</td>
-      <td>-0.692715</td>
-      <td>-0.842694</td>
-      <td>-1.264066</td>
-      <td>1.223112</td>
-      <td>-0.333524</td>
-      <td>-0.131798</td>
-      <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>8398</th>
-      <td>3.229139</td>
-      <td>-5.199338</td>
-      <td>0.533636</td>
-      <td>-0.663276</td>
-      <td>0.288000</td>
-      <td>-0.842694</td>
-      <td>-1.264066</td>
-      <td>0.831209</td>
-      <td>-0.943986</td>
-      <td>-0.156744</td>
-      <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>8399</th>
-      <td>3.234652</td>
-      <td>-5.199338</td>
-      <td>-1.068522</td>
-      <td>-1.418119</td>
-      <td>-0.945616</td>
-      <td>-1.467860</td>
-      <td>-0.593940</td>
-      <td>0.744694</td>
-      <td>2.702784</td>
-      <td>0.737605</td>
-      <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>8400</th>
-      <td>3.339828</td>
-      <td>0.746351</td>
-      <td>-1.068522</td>
-      <td>0.605701</td>
-      <td>0.419115</td>
-      <td>0.444534</td>
-      <td>-0.729877</td>
-      <td>1.156164</td>
-      <td>-0.028916</td>
-      <td>0.344582</td>
-      <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>8401</th>
-      <td>4.110136</td>
-      <td>0.746351</td>
-      <td>-1.068522</td>
-      <td>0.135645</td>
-      <td>-0.844790</td>
-      <td>-0.139710</td>
-      <td>0.043924</td>
-      <td>-0.258665</td>
-      <td>-0.119468</td>
-      <td>-0.164297</td>
-      <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>8402</th>
-      <td>5.199338</td>
-      <td>0.746351</td>
-      <td>0.015055</td>
-      <td>-1.460531</td>
-      <td>-1.075207</td>
-      <td>-1.467860</td>
-      <td>-0.299230</td>
-      <td>-0.269742</td>
-      <td>-1.409668</td>
-      <td>0.671732</td>
-      <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-    </tr>
-  </tbody>
-</table>
-<p>8403 rows × 213 columns</p>
-</div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df_train_balanced</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -710,23 +386,23 @@ Load dataset<div class="nbinput nblast docutils container">
   <tbody>
     <tr>
       <th>0</th>
-      <td>2.571996</td>
+      <td>-0.701669</td>
       <td>0</td>
       <td>-5.199338</td>
-      <td>-1.368450</td>
-      <td>-0.257495</td>
-      <td>-0.257495</td>
-      <td>-0.086674</td>
-      <td>0.291367</td>
-      <td>-0.564986</td>
-      <td>1.018778</td>
+      <td>-1.362078</td>
+      <td>0.594274</td>
+      <td>0.363967</td>
+      <td>0.788455</td>
+      <td>0.676854</td>
+      <td>-0.727750</td>
+      <td>0.415763</td>
       <td>...</td>
       <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
       <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>1</td>
@@ -734,23 +410,23 @@ Load dataset<div class="nbinput nblast docutils container">
     </tr>
     <tr>
       <th>1</th>
-      <td>2.476608</td>
+      <td>-0.988809</td>
       <td>0</td>
       <td>-5.199338</td>
-      <td>1.088723</td>
-      <td>0.177827</td>
-      <td>0.202098</td>
-      <td>0.320290</td>
-      <td>5.199338</td>
-      <td>1.339147</td>
-      <td>-0.584288</td>
+      <td>-0.444534</td>
+      <td>0.293986</td>
+      <td>0.372246</td>
+      <td>-0.072829</td>
+      <td>0.935852</td>
+      <td>-1.924632</td>
+      <td>0.805961</td>
       <td>...</td>
       <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
       <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>1</td>
@@ -758,40 +434,40 @@ Load dataset<div class="nbinput nblast docutils container">
     </tr>
     <tr>
       <th>2</th>
-      <td>0.081761</td>
+      <td>-0.602116</td>
       <td>0</td>
-      <td>-5.199338</td>
-      <td>1.088723</td>
-      <td>0.118204</td>
-      <td>0.624172</td>
-      <td>-0.086674</td>
-      <td>5.199338</td>
-      <td>-0.108581</td>
-      <td>-0.044369</td>
+      <td>0.716839</td>
+      <td>-0.116941</td>
+      <td>0.197009</td>
+      <td>-0.850234</td>
+      <td>-0.305796</td>
+      <td>-1.269664</td>
+      <td>0.663931</td>
+      <td>-0.954191</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>1</td>
       <td>0</td>
+      <td>1</td>
       <td>0</td>
       <td>1</td>
       <td>0</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-0.475078</td>
+      <td>1.794403</td>
       <td>0</td>
       <td>-5.199338</td>
-      <td>-0.091712</td>
-      <td>-0.132113</td>
-      <td>0.385388</td>
-      <td>-0.280911</td>
-      <td>-0.517790</td>
-      <td>0.889772</td>
-      <td>0.064289</td>
+      <td>-0.444534</td>
+      <td>-0.256198</td>
+      <td>-1.048748</td>
+      <td>-0.072829</td>
+      <td>0.676854</td>
+      <td>-0.305052</td>
+      <td>0.969427</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -806,24 +482,24 @@ Load dataset<div class="nbinput nblast docutils container">
     </tr>
     <tr>
       <th>4</th>
-      <td>-0.480132</td>
+      <td>-0.694229</td>
       <td>0</td>
       <td>-5.199338</td>
-      <td>0.459820</td>
-      <td>0.354822</td>
-      <td>0.545244</td>
-      <td>0.504922</td>
-      <td>5.199338</td>
-      <td>-1.459761</td>
-      <td>-2.159307</td>
+      <td>-2.096521</td>
+      <td>-0.256198</td>
+      <td>-0.877196</td>
+      <td>-0.072829</td>
+      <td>0.676854</td>
+      <td>-0.042009</td>
+      <td>-0.705986</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>1</td>
       <td>0</td>
+      <td>1</td>
       <td>0</td>
       <td>1</td>
       <td>0</td>
@@ -854,16 +530,16 @@ Load dataset<div class="nbinput nblast docutils container">
     </tr>
     <tr>
       <th>7523</th>
-      <td>3.161930</td>
+      <td>3.399052</td>
       <td>1</td>
-      <td>0.733156</td>
-      <td>-0.421111</td>
-      <td>-0.189187</td>
-      <td>0.532893</td>
+      <td>0.716839</td>
+      <td>-0.444534</td>
+      <td>-0.186000</td>
+      <td>0.539569</td>
       <td>-0.322932</td>
-      <td>0.180377</td>
-      <td>0.473331</td>
-      <td>-0.205941</td>
+      <td>0.148584</td>
+      <td>0.486918</td>
+      <td>-0.195700</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -878,16 +554,16 @@ Load dataset<div class="nbinput nblast docutils container">
     </tr>
     <tr>
       <th>7524</th>
-      <td>3.247057</td>
+      <td>3.466660</td>
       <td>1</td>
-      <td>0.733156</td>
-      <td>0.991746</td>
-      <td>0.429987</td>
-      <td>1.310640</td>
-      <td>0.377630</td>
-      <td>-0.075345</td>
-      <td>0.772027</td>
-      <td>-0.066450</td>
+      <td>0.716839</td>
+      <td>0.945616</td>
+      <td>0.447879</td>
+      <td>1.316586</td>
+      <td>0.395204</td>
+      <td>-0.108103</td>
+      <td>0.774478</td>
+      <td>-0.055540</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -902,16 +578,16 @@ Load dataset<div class="nbinput nblast docutils container">
     </tr>
     <tr>
       <th>7525</th>
-      <td>3.383887</td>
+      <td>3.568461</td>
       <td>1</td>
       <td>-5.199338</td>
-      <td>0.071571</td>
-      <td>1.721914</td>
-      <td>1.044409</td>
-      <td>1.355761</td>
-      <td>1.132898</td>
-      <td>0.814576</td>
-      <td>-0.705530</td>
+      <td>0.041413</td>
+      <td>1.738731</td>
+      <td>1.053106</td>
+      <td>1.371657</td>
+      <td>1.116369</td>
+      <td>0.817900</td>
+      <td>-0.689529</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -926,16 +602,16 @@ Load dataset<div class="nbinput nblast docutils container">
     </tr>
     <tr>
       <th>7526</th>
-      <td>3.436495</td>
+      <td>3.604753</td>
       <td>1</td>
-      <td>0.733156</td>
-      <td>0.552537</td>
-      <td>-0.257495</td>
-      <td>0.490519</td>
-      <td>-0.086674</td>
-      <td>0.091712</td>
-      <td>1.370228</td>
-      <td>-0.688441</td>
+      <td>0.716839</td>
+      <td>0.496390</td>
+      <td>-0.256198</td>
+      <td>0.498519</td>
+      <td>-0.072829</td>
+      <td>0.047692</td>
+      <td>1.393650</td>
+      <td>-0.673967</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -950,16 +626,16 @@ Load dataset<div class="nbinput nblast docutils container">
     </tr>
     <tr>
       <th>7527</th>
-      <td>5.199338</td>
+      <td>3.907467</td>
       <td>1</td>
       <td>-5.199338</td>
-      <td>0.718462</td>
-      <td>-0.026349</td>
-      <td>-0.258827</td>
-      <td>-0.086674</td>
-      <td>-0.461215</td>
-      <td>-0.470049</td>
-      <td>1.320531</td>
+      <td>0.667419</td>
+      <td>-0.010037</td>
+      <td>-0.261573</td>
+      <td>-0.072829</td>
+      <td>-0.478025</td>
+      <td>-0.467493</td>
+      <td>1.325750</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -974,21 +650,251 @@ Load dataset<div class="nbinput nblast docutils container">
     </tr>
   </tbody>
 </table>
-<p>7528 rows × 213 columns</p>
+<p>7528 rows × 214 columns</p>
 </div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">column_nan</span><span class="o">=</span><span class="n">df_train_balanced</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-
+<span></span><span class="n">column_nan</span><span class="o">=</span><span class="n">df_balanced</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">column_nan</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;SK_ID_CURR&#39;,
+ &#39;TARGET&#39;,
+ &#39;CNT_CHILDREN&#39;,
+ &#39;AMT_INCOME_TOTAL&#39;,
+ &#39;AMT_CREDIT&#39;,
+ &#39;AMT_ANNUITY&#39;,
+ &#39;AMT_GOODS_PRICE&#39;,
+ &#39;REGION_POPULATION_RELATIVE&#39;,
+ &#39;DAYS_BIRTH&#39;,
+ &#39;DAYS_EMPLOYED&#39;,
+ &#39;DAYS_REGISTRATION&#39;,
+ &#39;DAYS_ID_PUBLISH&#39;,
+ &#39;FLAG_MOBIL&#39;,
+ &#39;FLAG_EMP_PHONE&#39;,
+ &#39;FLAG_WORK_PHONE&#39;,
+ &#39;FLAG_CONT_MOBILE&#39;,
+ &#39;FLAG_PHONE&#39;,
+ &#39;FLAG_EMAIL&#39;,
+ &#39;CNT_FAM_MEMBERS&#39;,
+ &#39;REGION_RATING_CLIENT&#39;,
+ &#39;REGION_RATING_CLIENT_W_CITY&#39;,
+ &#39;HOUR_APPR_PROCESS_START&#39;,
+ &#39;REG_REGION_NOT_LIVE_REGION&#39;,
+ &#39;REG_REGION_NOT_WORK_REGION&#39;,
+ &#39;LIVE_REGION_NOT_WORK_REGION&#39;,
+ &#39;REG_CITY_NOT_LIVE_CITY&#39;,
+ &#39;REG_CITY_NOT_WORK_CITY&#39;,
+ &#39;LIVE_CITY_NOT_WORK_CITY&#39;,
+ &#39;EXT_SOURCE_2&#39;,
+ &#39;EXT_SOURCE_3&#39;,
+ &#39;APARTMENTS_AVG&#39;,
+ &#39;YEARS_BEGINEXPLUATATION_AVG&#39;,
+ &#39;ELEVATORS_AVG&#39;,
+ &#39;ENTRANCES_AVG&#39;,
+ &#39;FLOORSMAX_AVG&#39;,
+ &#39;LIVINGAREA_AVG&#39;,
+ &#39;NONLIVINGAREA_AVG&#39;,
+ &#39;APARTMENTS_MODE&#39;,
+ &#39;YEARS_BEGINEXPLUATATION_MODE&#39;,
+ &#39;ELEVATORS_MODE&#39;,
+ &#39;ENTRANCES_MODE&#39;,
+ &#39;FLOORSMAX_MODE&#39;,
+ &#39;LIVINGAREA_MODE&#39;,
+ &#39;NONLIVINGAREA_MODE&#39;,
+ &#39;APARTMENTS_MEDI&#39;,
+ &#39;YEARS_BEGINEXPLUATATION_MEDI&#39;,
+ &#39;ELEVATORS_MEDI&#39;,
+ &#39;ENTRANCES_MEDI&#39;,
+ &#39;FLOORSMAX_MEDI&#39;,
+ &#39;LIVINGAREA_MEDI&#39;,
+ &#39;NONLIVINGAREA_MEDI&#39;,
+ &#39;TOTALAREA_MODE&#39;,
+ &#39;OBS_30_CNT_SOCIAL_CIRCLE&#39;,
+ &#39;DEF_30_CNT_SOCIAL_CIRCLE&#39;,
+ &#39;OBS_60_CNT_SOCIAL_CIRCLE&#39;,
+ &#39;DEF_60_CNT_SOCIAL_CIRCLE&#39;,
+ &#39;DAYS_LAST_PHONE_CHANGE&#39;,
+ &#39;FLAG_DOCUMENT_2&#39;,
+ &#39;FLAG_DOCUMENT_3&#39;,
+ &#39;FLAG_DOCUMENT_4&#39;,
+ &#39;FLAG_DOCUMENT_5&#39;,
+ &#39;FLAG_DOCUMENT_6&#39;,
+ &#39;FLAG_DOCUMENT_7&#39;,
+ &#39;FLAG_DOCUMENT_8&#39;,
+ &#39;FLAG_DOCUMENT_9&#39;,
+ &#39;FLAG_DOCUMENT_10&#39;,
+ &#39;FLAG_DOCUMENT_11&#39;,
+ &#39;FLAG_DOCUMENT_12&#39;,
+ &#39;FLAG_DOCUMENT_13&#39;,
+ &#39;FLAG_DOCUMENT_14&#39;,
+ &#39;FLAG_DOCUMENT_15&#39;,
+ &#39;FLAG_DOCUMENT_16&#39;,
+ &#39;FLAG_DOCUMENT_17&#39;,
+ &#39;FLAG_DOCUMENT_18&#39;,
+ &#39;FLAG_DOCUMENT_19&#39;,
+ &#39;FLAG_DOCUMENT_20&#39;,
+ &#39;FLAG_DOCUMENT_21&#39;,
+ &#39;AMT_REQ_CREDIT_BUREAU_HOUR&#39;,
+ &#39;AMT_REQ_CREDIT_BUREAU_DAY&#39;,
+ &#39;AMT_REQ_CREDIT_BUREAU_WEEK&#39;,
+ &#39;AMT_REQ_CREDIT_BUREAU_MON&#39;,
+ &#39;AMT_REQ_CREDIT_BUREAU_QRT&#39;,
+ &#39;AMT_REQ_CREDIT_BUREAU_YEAR&#39;,
+ &#39;NAME_CONTRACT_TYPE_Cash loans&#39;,
+ &#39;NAME_CONTRACT_TYPE_Revolving loans&#39;,
+ &#39;CODE_GENDER_F&#39;,
+ &#39;CODE_GENDER_M&#39;,
+ &#39;FLAG_OWN_CAR_N&#39;,
+ &#39;FLAG_OWN_CAR_Y&#39;,
+ &#39;FLAG_OWN_REALTY_N&#39;,
+ &#39;FLAG_OWN_REALTY_Y&#39;,
+ &#39;NAME_TYPE_SUITE_Children&#39;,
+ &#39;NAME_TYPE_SUITE_Family&#39;,
+ &#39;NAME_TYPE_SUITE_Group of people&#39;,
+ &#39;NAME_TYPE_SUITE_Other_A&#39;,
+ &#39;NAME_TYPE_SUITE_Other_B&#39;,
+ &#39;NAME_TYPE_SUITE_Spouse, partner&#39;,
+ &#39;NAME_TYPE_SUITE_Unaccompanied&#39;,
+ &#39;NAME_INCOME_TYPE_Businessman&#39;,
+ &#39;NAME_INCOME_TYPE_Commercial associate&#39;,
+ &#39;NAME_INCOME_TYPE_State servant&#39;,
+ &#39;NAME_INCOME_TYPE_Working&#39;,
+ &#39;NAME_EDUCATION_TYPE_Academic degree&#39;,
+ &#39;NAME_EDUCATION_TYPE_Higher education&#39;,
+ &#39;NAME_EDUCATION_TYPE_Incomplete higher&#39;,
+ &#39;NAME_EDUCATION_TYPE_Lower secondary&#39;,
+ &#39;NAME_EDUCATION_TYPE_Secondary / secondary special&#39;,
+ &#39;NAME_FAMILY_STATUS_Civil marriage&#39;,
+ &#39;NAME_FAMILY_STATUS_Married&#39;,
+ &#39;NAME_FAMILY_STATUS_Separated&#39;,
+ &#39;NAME_FAMILY_STATUS_Single / not married&#39;,
+ &#39;NAME_FAMILY_STATUS_Widow&#39;,
+ &#39;NAME_HOUSING_TYPE_Co-op apartment&#39;,
+ &#39;NAME_HOUSING_TYPE_House / apartment&#39;,
+ &#39;NAME_HOUSING_TYPE_Municipal apartment&#39;,
+ &#39;NAME_HOUSING_TYPE_Office apartment&#39;,
+ &#39;NAME_HOUSING_TYPE_Rented apartment&#39;,
+ &#39;NAME_HOUSING_TYPE_With parents&#39;,
+ &#39;OCCUPATION_TYPE_Accountants&#39;,
+ &#39;OCCUPATION_TYPE_Cleaning staff&#39;,
+ &#39;OCCUPATION_TYPE_Cooking staff&#39;,
+ &#39;OCCUPATION_TYPE_Core staff&#39;,
+ &#39;OCCUPATION_TYPE_Drivers&#39;,
+ &#39;OCCUPATION_TYPE_HR staff&#39;,
+ &#39;OCCUPATION_TYPE_High skill tech staff&#39;,
+ &#39;OCCUPATION_TYPE_IT staff&#39;,
+ &#39;OCCUPATION_TYPE_Laborers&#39;,
+ &#39;OCCUPATION_TYPE_Low-skill Laborers&#39;,
+ &#39;OCCUPATION_TYPE_Managers&#39;,
+ &#39;OCCUPATION_TYPE_Medicine staff&#39;,
+ &#39;OCCUPATION_TYPE_Private service staff&#39;,
+ &#39;OCCUPATION_TYPE_Realty agents&#39;,
+ &#39;OCCUPATION_TYPE_Sales staff&#39;,
+ &#39;OCCUPATION_TYPE_Secretaries&#39;,
+ &#39;OCCUPATION_TYPE_Security staff&#39;,
+ &#39;OCCUPATION_TYPE_Waiters/barmen staff&#39;,
+ &#39;WEEKDAY_APPR_PROCESS_START_FRIDAY&#39;,
+ &#39;WEEKDAY_APPR_PROCESS_START_MONDAY&#39;,
+ &#39;WEEKDAY_APPR_PROCESS_START_SATURDAY&#39;,
+ &#39;WEEKDAY_APPR_PROCESS_START_SUNDAY&#39;,
+ &#39;WEEKDAY_APPR_PROCESS_START_THURSDAY&#39;,
+ &#39;WEEKDAY_APPR_PROCESS_START_TUESDAY&#39;,
+ &#39;WEEKDAY_APPR_PROCESS_START_WEDNESDAY&#39;,
+ &#39;ORGANIZATION_TYPE_Advertising&#39;,
+ &#39;ORGANIZATION_TYPE_Agriculture&#39;,
+ &#39;ORGANIZATION_TYPE_Bank&#39;,
+ &#39;ORGANIZATION_TYPE_Business Entity Type 1&#39;,
+ &#39;ORGANIZATION_TYPE_Business Entity Type 2&#39;,
+ &#39;ORGANIZATION_TYPE_Business Entity Type 3&#39;,
+ &#39;ORGANIZATION_TYPE_Cleaning&#39;,
+ &#39;ORGANIZATION_TYPE_Construction&#39;,
+ &#39;ORGANIZATION_TYPE_Culture&#39;,
+ &#39;ORGANIZATION_TYPE_Electricity&#39;,
+ &#39;ORGANIZATION_TYPE_Emergency&#39;,
+ &#39;ORGANIZATION_TYPE_Government&#39;,
+ &#39;ORGANIZATION_TYPE_Hotel&#39;,
+ &#39;ORGANIZATION_TYPE_Housing&#39;,
+ &#39;ORGANIZATION_TYPE_Industry: type 1&#39;,
+ &#39;ORGANIZATION_TYPE_Industry: type 10&#39;,
+ &#39;ORGANIZATION_TYPE_Industry: type 11&#39;,
+ &#39;ORGANIZATION_TYPE_Industry: type 12&#39;,
+ &#39;ORGANIZATION_TYPE_Industry: type 2&#39;,
+ &#39;ORGANIZATION_TYPE_Industry: type 3&#39;,
+ &#39;ORGANIZATION_TYPE_Industry: type 4&#39;,
+ &#39;ORGANIZATION_TYPE_Industry: type 5&#39;,
+ &#39;ORGANIZATION_TYPE_Industry: type 6&#39;,
+ &#39;ORGANIZATION_TYPE_Industry: type 7&#39;,
+ &#39;ORGANIZATION_TYPE_Industry: type 9&#39;,
+ &#39;ORGANIZATION_TYPE_Insurance&#39;,
+ &#39;ORGANIZATION_TYPE_Kindergarten&#39;,
+ &#39;ORGANIZATION_TYPE_Legal Services&#39;,
+ &#39;ORGANIZATION_TYPE_Medicine&#39;,
+ &#39;ORGANIZATION_TYPE_Military&#39;,
+ &#39;ORGANIZATION_TYPE_Mobile&#39;,
+ &#39;ORGANIZATION_TYPE_Other&#39;,
+ &#39;ORGANIZATION_TYPE_Police&#39;,
+ &#39;ORGANIZATION_TYPE_Postal&#39;,
+ &#39;ORGANIZATION_TYPE_Realtor&#39;,
+ &#39;ORGANIZATION_TYPE_Religion&#39;,
+ &#39;ORGANIZATION_TYPE_Restaurant&#39;,
+ &#39;ORGANIZATION_TYPE_School&#39;,
+ &#39;ORGANIZATION_TYPE_Security&#39;,
+ &#39;ORGANIZATION_TYPE_Security Ministries&#39;,
+ &#39;ORGANIZATION_TYPE_Self-employed&#39;,
+ &#39;ORGANIZATION_TYPE_Services&#39;,
+ &#39;ORGANIZATION_TYPE_Telecom&#39;,
+ &#39;ORGANIZATION_TYPE_Trade: type 1&#39;,
+ &#39;ORGANIZATION_TYPE_Trade: type 2&#39;,
+ &#39;ORGANIZATION_TYPE_Trade: type 3&#39;,
+ &#39;ORGANIZATION_TYPE_Trade: type 4&#39;,
+ &#39;ORGANIZATION_TYPE_Trade: type 5&#39;,
+ &#39;ORGANIZATION_TYPE_Trade: type 6&#39;,
+ &#39;ORGANIZATION_TYPE_Trade: type 7&#39;,
+ &#39;ORGANIZATION_TYPE_Transport: type 1&#39;,
+ &#39;ORGANIZATION_TYPE_Transport: type 2&#39;,
+ &#39;ORGANIZATION_TYPE_Transport: type 3&#39;,
+ &#39;ORGANIZATION_TYPE_Transport: type 4&#39;,
+ &#39;ORGANIZATION_TYPE_University&#39;,
+ &#39;FONDKAPREMONT_MODE_not specified&#39;,
+ &#39;FONDKAPREMONT_MODE_org spec account&#39;,
+ &#39;FONDKAPREMONT_MODE_reg oper account&#39;,
+ &#39;FONDKAPREMONT_MODE_reg oper spec account&#39;,
+ &#39;HOUSETYPE_MODE_block of flats&#39;,
+ &#39;HOUSETYPE_MODE_specific housing&#39;,
+ &#39;HOUSETYPE_MODE_terraced house&#39;,
+ &#39;WALLSMATERIAL_MODE_Block&#39;,
+ &#39;WALLSMATERIAL_MODE_Mixed&#39;,
+ &#39;WALLSMATERIAL_MODE_Monolithic&#39;,
+ &#39;WALLSMATERIAL_MODE_Others&#39;,
+ &#39;WALLSMATERIAL_MODE_Panel&#39;,
+ &#39;WALLSMATERIAL_MODE_Stone, brick&#39;,
+ &#39;WALLSMATERIAL_MODE_Wooden&#39;,
+ &#39;EMERGENCYSTATE_MODE_No&#39;,
+ &#39;EMERGENCYSTATE_MODE_Yes&#39;]
+</pre></div></div>
+</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1023,9 +929,9 @@ Split smatly the dataset in train, validation and test dataset<div class="nbinpu
     <span class="k">return</span> <span class="n">train_idxs</span><span class="p">,</span> <span class="n">val_idxs</span>
 
 
-<span class="n">train_idxs</span><span class="p">,</span> <span class="n">val_idxs</span> <span class="o">=</span> <span class="n">stratified_split</span><span class="p">(</span><span class="n">df_train_balanced</span><span class="p">,</span> <span class="s1">&#39;TARGET&#39;</span><span class="p">,</span> <span class="n">val_percent</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="n">train_idxs</span><span class="p">,</span> <span class="n">val_idxs</span> <span class="o">=</span> <span class="n">stratified_split</span><span class="p">(</span><span class="n">df_balanced</span><span class="p">,</span> <span class="s1">&#39;TARGET&#39;</span><span class="p">,</span> <span class="n">val_percent</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
 
-<span class="n">val_idxs</span><span class="p">,</span> <span class="n">test_idxs</span> <span class="o">=</span> <span class="n">stratified_split</span><span class="p">(</span><span class="n">df_train_balanced</span><span class="p">[</span><span class="n">df_train_balanced</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">val_idxs</span><span class="p">)],</span> <span class="s1">&#39;TARGET&#39;</span><span class="p">,</span> <span class="n">val_percent</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">val_idxs</span><span class="p">,</span> <span class="n">test_idxs</span> <span class="o">=</span> <span class="n">stratified_split</span><span class="p">(</span><span class="n">df_balanced</span><span class="p">[</span><span class="n">df_balanced</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">val_idxs</span><span class="p">)],</span> <span class="s1">&#39;TARGET&#39;</span><span class="p">,</span> <span class="n">val_percent</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1034,20 +940,20 @@ Split smatly the dataset in train, validation and test dataset<div class="nbinpu
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">train_df</span> <span class="o">=</span> <span class="n">df_train_balanced</span><span class="p">[</span><span class="n">df_train_balanced</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">train_idxs</span><span class="p">)]</span>
+<span></span><span class="n">train_df</span> <span class="o">=</span> <span class="n">df_balanced</span><span class="p">[</span><span class="n">df_balanced</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">train_idxs</span><span class="p">)]</span>
 
 <span class="n">X_train</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="n">column_nan</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 <span class="n">Y_train</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[[</span><span class="s1">&#39;TARGET&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Retrieved Training Data&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="n">Y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
-<span class="n">val_df</span> <span class="o">=</span> <span class="n">df_train_balanced</span><span class="p">[</span><span class="n">df_train_balanced</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">val_idxs</span><span class="p">)]</span>
+<span class="n">val_df</span> <span class="o">=</span> <span class="n">df_balanced</span><span class="p">[</span><span class="n">df_balanced</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">val_idxs</span><span class="p">)]</span>
 <span class="n">X_val</span> <span class="o">=</span> <span class="n">val_df</span><span class="p">[</span><span class="n">column_nan</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 <span class="n">Y_val</span> <span class="o">=</span> <span class="n">val_df</span><span class="p">[[</span><span class="s1">&#39;TARGET&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Retrieved Validation Data&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">X_val</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="s1">&#39;----&#39;</span><span class="p">,</span><span class="n">Y_val</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
-<span class="n">test_df</span> <span class="o">=</span> <span class="n">df_train_balanced</span><span class="p">[</span><span class="n">df_train_balanced</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">test_idxs</span><span class="p">)]</span>
+<span class="n">test_df</span> <span class="o">=</span> <span class="n">df_balanced</span><span class="p">[</span><span class="n">df_balanced</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">test_idxs</span><span class="p">)]</span>
 <span class="n">X_test</span> <span class="o">=</span> <span class="n">test_df</span><span class="p">[</span><span class="n">column_nan</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 <span class="n">Y_test</span> <span class="o">=</span> <span class="n">test_df</span><span class="p">[[</span><span class="s1">&#39;TARGET&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Retrieved Test Data&#39;</span><span class="p">)</span>
@@ -1061,11 +967,11 @@ Split smatly the dataset in train, validation and test dataset<div class="nbinpu
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Retrieved Training Data
-(5646, 213) ---- (5646, 1)
+(5646, 214) ---- (5646, 1)
 Retrieved Validation Data
-(942, 213) ---- (942, 1)
+(942, 214) ---- (942, 1)
 Retrieved Test Data
-(940, 213) ---- (940, 1)
+(940, 214) ---- (940, 1)
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -1088,8 +994,7 @@ Create the model and fit with random value<div class="nbinput docutils container
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">clf_balanced</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">27</span><span class="p">,</span>
-                       <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span></span><span class="n">clf_balanced</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">27</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">clf_balanced</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;X_train&#39;</span><span class="p">],</span> <span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">training_data</span><span class="p">[</span><span class="s1">&#39;Y_train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
 </pre></div>
 </div>
@@ -1100,7 +1005,7 @@ Create the model and fit with random value<div class="nbinput docutils container
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
 [Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
-[Parallel(n_jobs=1)]: Done 100 out of 100 | elapsed:    1.2s finished
+[Parallel(n_jobs=1)]: Done 100 out of 100 | elapsed:    1.1s finished
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1127,7 +1032,7 @@ RandomForestClassifier(random_state=27, verbose=1)
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
 [Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
-[Parallel(n_jobs=1)]: Done 100 out of 100 | elapsed:    0.1s finished
+[Parallel(n_jobs=1)]: Done 100 out of 100 | elapsed:    0.0s finished
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1149,7 +1054,7 @@ RandomForestClassifier(random_state=27, verbose=1)
 </pre></div></div>
 </div>
 Train model with different parameterr to find the best one<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1181,29 +1086,29 @@ Fitting 5 folds for each of 40 candidates, totalling 200 fits
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
 [Parallel(n_jobs=-1)]: Using backend LokyBackend with 4 concurrent workers.
-[Parallel(n_jobs=-1)]: Done   5 tasks      | elapsed:    7.5s
-[Parallel(n_jobs=-1)]: Done  10 tasks      | elapsed:   14.1s
-[Parallel(n_jobs=-1)]: Done  17 tasks      | elapsed:   22.7s
-[Parallel(n_jobs=-1)]: Done  24 tasks      | elapsed:   30.3s
-[Parallel(n_jobs=-1)]: Done  33 tasks      | elapsed:   42.9s
-[Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:   53.7s
-[Parallel(n_jobs=-1)]: Done  53 tasks      | elapsed:  1.0min
+[Parallel(n_jobs=-1)]: Done   5 tasks      | elapsed:    7.2s
+[Parallel(n_jobs=-1)]: Done  10 tasks      | elapsed:   10.3s
+[Parallel(n_jobs=-1)]: Done  17 tasks      | elapsed:   16.7s
+[Parallel(n_jobs=-1)]: Done  24 tasks      | elapsed:   23.9s
+[Parallel(n_jobs=-1)]: Done  33 tasks      | elapsed:   38.3s
+[Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:   49.2s
+[Parallel(n_jobs=-1)]: Done  53 tasks      | elapsed:   57.8s
 [Parallel(n_jobs=-1)]: Done  64 tasks      | elapsed:  1.2min
 [Parallel(n_jobs=-1)]: Done  77 tasks      | elapsed:  1.5min
-[Parallel(n_jobs=-1)]: Done  90 tasks      | elapsed:  1.6min
-[Parallel(n_jobs=-1)]: Done 105 tasks      | elapsed:  2.1min
-[Parallel(n_jobs=-1)]: Done 120 tasks      | elapsed:  2.5min
-[Parallel(n_jobs=-1)]: Done 137 tasks      | elapsed:  2.6min
-[Parallel(n_jobs=-1)]: Done 154 tasks      | elapsed:  3.0min
-[Parallel(n_jobs=-1)]: Done 173 tasks      | elapsed:  3.3min
-[Parallel(n_jobs=-1)]: Done 192 tasks      | elapsed:  3.8min
-[Parallel(n_jobs=-1)]: Done 200 out of 200 | elapsed:  4.0min finished
+[Parallel(n_jobs=-1)]: Done  90 tasks      | elapsed:  1.8min
+[Parallel(n_jobs=-1)]: Done 105 tasks      | elapsed:  2.2min
+[Parallel(n_jobs=-1)]: Done 120 tasks      | elapsed:  2.7min
+[Parallel(n_jobs=-1)]: Done 137 tasks      | elapsed:  2.9min
+[Parallel(n_jobs=-1)]: Done 154 tasks      | elapsed:  3.4min
+[Parallel(n_jobs=-1)]: Done 173 tasks      | elapsed:  4.0min
+[Parallel(n_jobs=-1)]: Done 192 tasks      | elapsed:  4.6min
+[Parallel(n_jobs=-1)]: Done 200 out of 200 | elapsed:  4.8min finished
 [Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
-[Parallel(n_jobs=1)]: Done 450 out of 450 | elapsed:    4.6s finished
+[Parallel(n_jobs=1)]: Done 150 out of 150 | elapsed:    2.8s finished
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1217,7 +1122,7 @@ GridSearchCV(cv=5, estimator=RandomForestClassifier(random_state=27, verbose=1),
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1233,7 +1138,7 @@ GridSearchCV(cv=5, estimator=RandomForestClassifier(random_state=27, verbose=1),
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1242,56 +1147,16 @@ GridSearchCV(cv=5, estimator=RandomForestClassifier(random_state=27, verbose=1),
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-({0: &#34;mean:0.9330854307594629params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 8, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 100}&#34;,
-  1: &#34;mean:0.9314735414690736params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 8, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 150}&#34;,
-  2: &#34;mean:0.9420923834233443params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 8, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 200}&#34;,
-  3: &#34;mean:0.9470515845332622params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 8, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 250}&#34;,
-  4: &#34;mean:0.9564374456210759params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 8, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 300}&#34;,
-  5: &#34;mean:0.9683011828150843params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 8, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 350}&#34;,
-  6: &#34;mean:0.9695420020850154params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 8, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 400}&#34;,
-  7: &#34;mean:0.9651175368600924params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 8, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 450}&#34;,
-  8: &#34;mean:0.9544908565023477params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 9, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 100}&#34;,
-  9: &#34;mean:0.9603282723374903params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 9, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 150}&#34;,
-  10: &#34;mean:0.9603267046567956params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 9, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 200}&#34;,
-  11: &#34;mean:0.9576732483127838params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 9, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 250}&#34;,
-  12: &#34;mean:0.9601530056358121params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 9, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 300}&#34;,
-  13: &#34;mean:0.9681232510562248params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 9, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 350}&#34;,
-  14: &#34;mean:0.9688332536428981params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 9, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 400}&#34;,
-  15: &#34;mean:0.9649385077247465params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 9, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 450}&#34;,
-  16: &#34;mean:0.9479519035562836params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 10, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 100}&#34;,
-  17: &#34;mean:0.9629959945758249params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 10, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 150}&#34;,
-  18: &#34;mean:0.9723719792752611params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 10, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 200}&#34;,
-  19: &#34;mean:0.9638735822287716params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 10, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 250}&#34;,
-  20: &#34;mean:0.9658214254920559params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 10, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 300}&#34;,
-  21: &#34;mean:0.9697191500035272params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 10, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 350}&#34;,
-  22: &#34;mean:0.9805228215117145params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 10, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 400}&#34;,
-  23: &#34;mean:0.9782202121071979params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 10, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 450}&#34;,
-  24: &#34;mean:0.9801699365873159params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 11, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 100}&#34;,
-  25: &#34;mean:0.9764473220094532params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 11, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 150}&#34;,
-  26: &#34;mean:0.9729021688862414params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 11, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 200}&#34;,
-  27: &#34;mean:0.9762698605548021params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 11, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 250}&#34;,
-  28: &#34;mean:0.9759147808774309params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 11, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 300}&#34;,
-  29: &#34;mean:0.9842375976861033params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 11, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 350}&#34;,
-  30: &#34;mean:0.9877796154479256params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 11, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 400}&#34;,
-  31: &#34;mean:0.9872486419965982params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 11, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 450}&#34;,
-  32: &#34;mean:0.9791067355401053params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 12, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 100}&#34;,
-  33: &#34;mean:0.976802871991033params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 12, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 150}&#34;,
-  34: &#34;mean:0.9835279086355693params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 12, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 200}&#34;,
-  35: &#34;mean:0.9833543663826552params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 12, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 250}&#34;,
-  36: &#34;mean:0.9883102753631141params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 12, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 300}&#34;,
-  37: &#34;mean:0.9897265181027928params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 12, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 350}&#34;,
-  38: &#34;mean:0.9911437014508884params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 12, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 400}&#34;,
-  39: &#34;mean:0.9929156509402164params{&#39;criterion&#39;: &#39;gini&#39;, &#39;max_depth&#39;: 12, &#39;max_features&#39;: &#39;auto&#39;, &#39;n_estimators&#39;: 450}&#34;},
- {&#39;best_mean&#39;: 0.9929156509402164,
-  &#39;best_param&#39;: {&#39;criterion&#39;: &#39;gini&#39;,
-   &#39;max_depth&#39;: 12,
-   &#39;max_features&#39;: &#39;auto&#39;,
-   &#39;n_estimators&#39;: 450}})
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-46-e8c117a33285&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>getTrainScores<span class="ansi-blue-fg">(</span>gsearch1<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;getTrainScores&#39; is not defined
 </pre></div></div>
 </div>
 refine the parameters<div class="nbinput docutils container">
@@ -1776,7 +1641,7 @@ https://towardsdatascience.com/xgboost-for-multi-class-classification-799d96bcd3
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">Machine learning Finance use case</a></h1>
+<h1 class="logo"><a href="index.html">Project 1 of application of big data</a></h1>
 
 
 
@@ -1788,8 +1653,8 @@ https://towardsdatascience.com/xgboost-for-multi-class-classification-799d96bcd3
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="Feature%20engineering.html">Feature engineering</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Import%20data%20and%20data%20cleaning.html">Import data and data cleaning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Feature%20engineering.html">Feature engineering</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Model building For balanced dataset</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#Prepared-dataset">Prepared dataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Random-Forest">Random Forest</a></li>
@@ -1797,13 +1662,15 @@ https://towardsdatascience.com/xgboost-for-multi-class-classification-799d96bcd3
 <li class="toctree-l2"><a class="reference internal" href="#Gradient-boosting">Gradient boosting</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="XAI%20with%20SHAP%20method.html">XAI with SHAP method</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="Import%20data%20and%20data%20cleaning.html" title="previous chapter">Import data and data cleaning</a></li>
+      <li>Previous: <a href="Feature%20engineering.html" title="previous chapter">Feature engineering</a></li>
+      <li>Next: <a href="XAI%20with%20SHAP%20method.html" title="next chapter">XAI with SHAP method</a></li>
   </ul></li>
 </ul>
 </div>
@@ -1830,7 +1697,7 @@ https://towardsdatascience.com/xgboost-for-multi-class-classification-799d96bcd3
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2020, Seimandi Juliette and Gilles Robin.
+      &copy;2020, Robin gilles and Seimandi juliette.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
